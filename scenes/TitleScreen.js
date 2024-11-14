@@ -1,6 +1,6 @@
 // Starting point of game
 class TitleScreen extends Scene {
-    constructor() {
+    constructor(sceneManager) {
         const backgrounds = [
             new Tile(
                 vec2(0, 0),
@@ -24,7 +24,9 @@ class TitleScreen extends Scene {
                 ),
                 vec2(0, 0), 
                 vec2(16, 3),
-                () => {},
+                () => {
+                    sceneManager.index = getSceneByName("Cafe");
+                },
                 rgb(1, 1, 1, 1),
                 rgb(0, 1, 1, 1)
             ),

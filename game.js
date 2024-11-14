@@ -6,14 +6,15 @@ function gameInit()
     // setup the game
     setCanvasFixedSize(vec2(width, height));
     const startingIndex = 0;
-    const buildScenes = [
-        new TitleScreen(),
-        new Cafe()
-    ]
     sceneManager = new SceneManager(
         startingIndex,
-        buildScenes,
+        [],
     )
+    const buildScenes = [
+        new TitleScreen(sceneManager),
+        new Cafe(sceneManager)
+    ]
+    sceneManager.scenes = buildScenes;
 }
 
 function gameUpdate()

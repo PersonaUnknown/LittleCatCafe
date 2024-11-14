@@ -3,10 +3,15 @@ class Cafe extends Scene {
         const backgrounds = [
 
         ]
-        const labels = [
-            
+        const components = [
+            new Label(
+                "Cafe Scene",
+                new vec2(width * 0.5, height * 0.25),
+                75,
+                rgb(0, 0, 0, 1)
+            )
         ]
-        const initObjects = [...backgrounds, ...labels];
+        const initObjects = [...backgrounds, ...components];
         super(0, initObjects);
     }
 }

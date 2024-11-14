@@ -1,17 +1,19 @@
+const SceneList = {
+    "Title": 0,
+    "Cafe": 1,
+}
+function getSceneByName(scene) {
+    return SceneList[scene];
+}
 class SceneManager {
     constructor(index, scenes) {
         this.index = index;
         this.scenes = scenes;
     }
-    static onSceneChange(index) {
-        const length = this.scenes.length;
-        if (index >= 0 && index < length) {
-            this.index = index;
-        }
-    }
     update() {
         const index = this.index;
         const scenes = this.scenes;
+        console.log(index);
         if (index >= 0 && index < scenes.length) {
             const currScene = scenes[index];
             currScene.update();
