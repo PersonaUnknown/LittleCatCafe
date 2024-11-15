@@ -17,8 +17,8 @@ class Cafe extends Scene {
             new Player(
                 vec2(),
                 vec2(1),
-                PlayerTile,
-                0
+                PlayerAnims,
+                8
             )
         ]
         const initObjects = [...backgrounds, ...components];

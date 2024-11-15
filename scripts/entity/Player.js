@@ -1,9 +1,10 @@
-class Player extends EngineObject {
-    constructor(pos, size, tileInfo, angle)
+class Player {
+    constructor(pos, size, animator, speed)
     {
-        super(pos, size, tileInfo, angle);
-        // setup object
-        this.speed = 8;
+        this.pos = pos;
+        this.size = size;
+        this.animator = animator;
+        this.speed = speed;
     }
 
     update()
@@ -21,15 +22,14 @@ class Player extends EngineObject {
         if (keyIsDown("KeyD")) {
             this.pos.x += timeDelta * this.speed;
         }
-        super.update(); 
     }
 
     render()
     {
-        // draw object as a sprite
-        super.render();
+        this.animator.render(this.pos, this.size);
     }
+
     renderPost() {
-        
+
     }
 }
