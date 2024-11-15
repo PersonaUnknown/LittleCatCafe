@@ -13,7 +13,6 @@ class SceneManager {
     update() {
         const index = this.index;
         const scenes = this.scenes;
-        console.log(index);
         if (index >= 0 && index < scenes.length) {
             const currScene = scenes[index];
             currScene.update();
