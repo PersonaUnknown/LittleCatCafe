@@ -12,15 +12,19 @@ class Player {
         // update object physics and position
         if (keyIsDown("KeyW")) {
             this.pos.y += timeDelta * this.speed;
+            this.animator.setState("back");
         }
         if (keyIsDown("KeyA")) {
             this.pos.x -= timeDelta * this.speed;
+            this.animator.setState("left");
         }
         if (keyIsDown("KeyS")) {
             this.pos.y -= timeDelta * this.speed;
+            this.animator.setState("front");
         }
         if (keyIsDown("KeyD")) {
             this.pos.x += timeDelta * this.speed;
+            this.animator.setState("right");
         }
     }
 

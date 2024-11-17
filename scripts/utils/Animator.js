@@ -7,6 +7,13 @@ class Animator {
         this.timer = new Timer(delay);
     }
 
+    setState(state) {
+        if (state === this.activeState) return;
+        this.activeState = state;
+        this.currAnimFrame = 0;
+        this.timer.set(this.delay);
+    }
+
     render(pos, size) {
         if (this.timer.elapsed()) {
             this.currAnimFrame = (this.currAnimFrame + 1) % this.states[this.activeState].length;
