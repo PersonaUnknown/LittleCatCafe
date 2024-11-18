@@ -18,4 +18,6 @@ class Scene {
             object.renderPost();
         }
     }
+    init() {}
+    destroy() {}
 }

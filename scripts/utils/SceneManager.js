@@ -34,4 +34,12 @@ class SceneManager {
             currScene.renderPost();
         }
     }
+    switchScene(scene) {
+        let sceneId = SceneList[scene];
+        if (this.index !== sceneId) {
+            this.scenes[this.index].destroy();
+            this.index = sceneId;
+            this.scenes[this.index].init();
+        }
+    }
 }

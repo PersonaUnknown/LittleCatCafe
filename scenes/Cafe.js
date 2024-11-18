@@ -1,19 +1,7 @@
 class Cafe extends Scene {
     constructor() {
-        const backgrounds = [
-            new Tile(
-                vec2(0, 0),
-                vec2(40, 22),
-                TitleBackground
-            )
-        ]
+        const backgrounds = [];
         const components = [
-            new Label(
-                "Cafe Scene",
-                new vec2(width * 0.5, height * 0.25),
-                75,
-                rgb(0, 0, 0, 1)
-            ),
             new Player(
                 vec2(),
                 vec2(1),
@@ -23,5 +11,30 @@ class Cafe extends Scene {
         ]
         const initObjects = [...backgrounds, ...components];
         super(0, initObjects);
+    }
+
+    init() {
+        this.tileLayers = [];
+        for (let layerNum = 0; layerNum < CafeLevelData.layers.length; layerNum++) {
+            this.tileLayers.push(new TileLayer(vec2(0, 0), vec2(CafeLevelData.width, CafeLevelData.height), CafeTileMap, vec2(1), layerNum));
+            const currLayer = this.tileLayers[layerNum];
+            let layer = CafeLevelData.layers[layerNum].data;
+            for (let i = 0; i < layer.length; i++) {
+                if (layer[i] === 0) continue;
+                let x = i % CafeLevelData.width;
+                let y = CafeLevelData.height - Math.floor(i / CafeLevelData.width) - 1;
+                let data = new TileLayerData(layer[i] - 1);
+                currLayer.setData(vec2(x, y), data);
+            }
+            currLayer.redraw();
+        }
+        setCameraPos(vec2(8));
+    }
+
+    destroy () {
+        for (const layer of this.tileLayers) {
+            layer.destroy();
+        }
+        this.tileLayers = [];
     }
 }

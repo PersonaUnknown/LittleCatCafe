@@ -25,7 +25,7 @@ class TitleScreen extends Scene {
                 vec2(0, 0), 
                 vec2(16, 3),
                 () => {
-                    sceneManager.index = getSceneByName("Cafe");
+                    sceneManager.switchScene("Cafe");
                 },
                 rgb(1, 1, 1, 1),
                 rgb(0, 1, 1, 1)

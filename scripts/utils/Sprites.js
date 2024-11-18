@@ -1,6 +1,9 @@
+const TILE_SIZE = vec2(16, 16);
+
 const sprites = [
     "sprites/Backgrounds/debug_title.png",
-    "sprites/neko_cats.png"
+    "sprites/neko_cats.png",
+    "sprites/neko-cafe-furnitures.png"
 ]
 const TitleBackground = new TileInfo(
     vec2(0, 0),
@@ -8,7 +11,7 @@ const TitleBackground = new TileInfo(
     0
 )
 
-const TILE_SIZE = vec2(16, 16);
+const CafeTileMap = new TileInfo(vec2(), TILE_SIZE, 2);
 
 const PlayerAnims = new Animator(
     {
