@@ -6,9 +6,10 @@ class Cafe extends Scene {
                 vec2(),
                 vec2(1),
                 PlayerAnims,
-                8
+                4
             )
         ]
+        components[0].pos = vec2(10, 13);
         const initObjects = [...backgrounds, ...components];
         super(0, initObjects);
     }

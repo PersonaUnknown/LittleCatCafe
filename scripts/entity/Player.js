@@ -9,22 +9,26 @@ class Player {
 
     update()
     {
-        // update object physics and position
+        let dest = vec2(this.pos);
         if (keyIsDown("KeyW")) {
-            this.pos.y += timeDelta * this.speed;
+            dest.y += timeDelta * this.speed;
             this.animator.setState("back");
         }
-        if (keyIsDown("KeyA")) {
-            this.pos.x -= timeDelta * this.speed;
+        else if (keyIsDown("KeyA")) {
+            dest.x -= timeDelta * this.speed;
             this.animator.setState("left");
         }
-        if (keyIsDown("KeyS")) {
-            this.pos.y -= timeDelta * this.speed;
+        else if (keyIsDown("KeyS")) {
+            dest.y -= timeDelta * this.speed;
             this.animator.setState("front");
         }
-        if (keyIsDown("KeyD")) {
-            this.pos.x += timeDelta * this.speed;
+        else if (keyIsDown("KeyD")) {
+            dest.x += timeDelta * this.speed;
             this.animator.setState("right");
+        }
+
+        if (dest.y > 12 && dest.y < 14 && dest.x > 1 && dest.x < 19) {
+            this.pos = dest;
         }
     }
 
