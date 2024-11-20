@@ -1,3 +1,4 @@
+// Main gameplay hub
 class Cafe extends Scene {
     constructor() {
         const backgrounds = [];
@@ -11,7 +12,7 @@ class Cafe extends Scene {
         ]
         components[0].pos = vec2(10, 13);
         const initObjects = [...backgrounds, ...components];
-        super(0, initObjects);
+        super(1, initObjects);
     }
 
     init() {
