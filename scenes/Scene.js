@@ -3,6 +3,9 @@ class Scene {
         this.index = index;
         this.objects = initObjects;
     }
+    addObject(object) {
+        this.objects.push(object);
+    }
     update() {
         for (const object of this.objects) {
             object.update();

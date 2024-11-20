@@ -30,6 +30,12 @@ class Cafe extends Scene {
             currLayer.redraw();
         }
         setCameraPos(vec2(8));
+    
+        this.book = new Book();
+        this.book.appendTask("Toast x1");
+        this.book.appendTask("Parfait x2");
+        this.book.appendRecipe("Toast", "");
+        this.addObject(this.book);
     }
 
     destroy () {
@@ -37,5 +43,12 @@ class Cafe extends Scene {
             layer.destroy();
         }
         this.tileLayers = [];
+    }
+
+    update() {
+        super.update();
+        if (keyWasPressed('KeyF')) {
+            this.book.toggleVisibility();
+        }
     }
 }
