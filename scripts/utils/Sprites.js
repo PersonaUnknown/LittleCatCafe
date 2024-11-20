@@ -3,12 +3,48 @@ const TILE_SIZE = vec2(16, 16);
 const sprites = [
     "sprites/Backgrounds/debug_title.png",
     "sprites/neko_cats.png",
-    "sprites/neko-cafe-furnitures.png"
+    "sprites/neko-cafe-furnitures.png",
+    "sprites/UI/divider.png",
+    "sprites/UI/input_square.png",
+    "sprites/UI/book.png",
+    "sprites/UI/recipe.png",
+    "sprites/UI/order.png",
+    "sprites/UI/bookmark.png"
 ]
 const TitleBackground = new TileInfo(
     vec2(0, 0),
     vec2(2304, 1536),
     0
+)
+const Divider = new TileInfo(
+    vec2(0, 0),
+    vec2(16, 4),
+    3
+)
+const InputSquareSprite = new TileInfo(
+    vec2(0, 0),
+    vec2(64, 64),
+    4
+)
+const BookSprite = new TileInfo(
+    vec2(0, 0),
+    vec2(892, 1039),
+    5
+)
+const RecipeIcon = new TileInfo(
+    vec2(0, 0),
+    vec2(100, 100),
+    6
+)
+const OrderIcon = new TileInfo(
+    vec2(0, 0),
+    vec2(100, 100),
+    7
+)
+const BookmarkIcon = new TileInfo(
+    vec2(0, 0),
+    vec2(100, 100),
+    8
 )
 
 const CafeTileMap = new TileInfo(vec2(), TILE_SIZE, 2);
