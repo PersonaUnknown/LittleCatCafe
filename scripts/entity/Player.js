@@ -1,10 +1,11 @@
 class Player {
-    constructor(pos, size, animator, speed)
+    constructor(pos, size, animator, speed, interactables)
     {
         this.pos = pos;
         this.size = size;
         this.animator = animator;
         this.speed = speed;
+        this.interactables = interactables;
     }
 
     update()
@@ -29,6 +30,15 @@ class Player {
 
         if (dest.y > 12 && dest.y < 14 && dest.x > 1 && dest.x < 19) {
             this.pos = dest;
+        }
+
+        if (keyWasPressed("KeyE")) {
+            for (const i of this.interactables) {
+                if (i.isWithin(this.pos)) {
+                    i.run();
+                    break;
+                }
+            }
         }
     }
 
