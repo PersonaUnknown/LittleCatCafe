@@ -9,14 +9,14 @@ class Label {
         
     }
     render() {
+
+    }
+    renderPost() {
         drawTextScreen(
             this.text,
             this.pos,
             this.size,
             this.color
-        ) 
-    }
-    renderPost() {
-        
+        )         
     }
 }

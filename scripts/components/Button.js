@@ -5,10 +5,12 @@ class Button {
         size,
         onPress, 
         backgroundColor, 
-        hoverBackgroundColor
+        hoverBackgroundColor,
+        isToggleButton = false
     ) {
         // Params
         this.label = label;
+        // this.icon = icon;
         this.pos = pos;
         this.size = size;
         this.onPress = onPress;
@@ -16,6 +18,18 @@ class Button {
         this.hoverBackgroundColor = hoverBackgroundColor;
         // States
         this.isMouseOver = false;
+        this.isToggleButton = isToggleButton;
+        this.isToggled = false;
+    }
+    toggleOn() {
+        if (this.isToggleButton) {
+            this.isToggled = true;
+        }
+    }
+    toggleOff() {
+        if (this.isToggleButton) {
+            this.isToggled = false; 
+        }
     }
     update() {
         this.isMouseOver = isPointWithinBox(mousePos, this.pos, this.size)
@@ -23,16 +37,58 @@ class Button {
             this.onPress();
         }
     }
-
     render() {
+        
+    }
+    renderPost() {
+        // Background
         drawRect(
             this.pos,
             this.size,
-            this.isMouseOver ? this.hoverBackgroundColor : this.backgroundColor
+            this.isMouseOver || (this.isToggleButton && this.isToggled) ? 
+                this.hoverBackgroundColor : 
+                this.backgroundColor
         )
-        this.label.render();
+        // Text Label
+        this.label.renderPost();
+        // Image Icon
+    }
+}
+
+class IconButton extends Button {
+    constructor(
+        tileInfo,
+        tilePos,
+        tileSize,
+        label,
+        buttonPos,
+        buttonSize,
+        onPress, 
+        backgroundColor, 
+        hoverBackgroundColor,
+        isToggleButton = false
+    ) {
+        super(
+            label,
+            buttonPos,
+            buttonSize,
+            onPress,
+            backgroundColor,
+            hoverBackgroundColor,
+            isToggleButton
+        );
+        this.tileInfo = tileInfo;
+        this.tilePos = tilePos;
+        this.tileSize = tileSize;
     }
     renderPost() {
-        
+        // Original Button
+        super.renderPost();
+        // Icon
+        drawTile(
+            this.tilePos,
+            this.tileSize,
+            this.tileInfo
+        )
     }
 }
