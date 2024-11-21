@@ -19,17 +19,28 @@ class Cafe extends Scene {
     }
 
     init() {
+        const cafeSize = vec2(CafeLevelData.width, CafeLevelData.height);
+        initTileCollision(cafeSize);
         this.tileLayers = [];
+
         for (let layerNum = 0; layerNum < CafeLevelData.layers.length; layerNum++) {
-            this.tileLayers.push(new TileLayer(vec2(0, 0), vec2(CafeLevelData.width, CafeLevelData.height), CafeTileMap, vec2(1), layerNum));
+            const renderOrder = layerNum + (layerNum >= 2 ? 100 : -100);
+            this.tileLayers.push(new TileLayer(vec2(0, 0), cafeSize, CafeTileMap, vec2(1), renderOrder));
+            console.log(CafeLevelData.layers[layerNum].name, renderOrder);
+
+            const layer = CafeLevelData.layers[layerNum].data;
             const currLayer = this.tileLayers[layerNum];
-            let layer = CafeLevelData.layers[layerNum].data;
             for (let i = 0; i < layer.length; i++) {
                 if (layer[i] === 0) continue;
                 let x = i % CafeLevelData.width;
                 let y = CafeLevelData.height - Math.floor(i / CafeLevelData.width) - 1;
+                let pos = vec2(x, y);
                 let data = new TileLayerData(layer[i] - 1);
-                currLayer.setData(vec2(x, y), data);
+                currLayer.setData(pos, data);
+
+                if (layerNum > 0) {
+                    setTileCollisionData(pos, 1);
+                }
             }
             currLayer.redraw();
         }
