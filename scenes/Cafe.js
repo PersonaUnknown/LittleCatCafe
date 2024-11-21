@@ -2,16 +2,19 @@
 class Cafe extends Scene {
     constructor() {
         const backgrounds = [];
+        const interactables = [
+            new Interactable(vec2(10, 13), vec2(1), () => console.log("here"))
+        ]
         const components = [
             new Player(
-                vec2(),
+                vec2(10, 13),
                 vec2(1),
                 PlayerAnims,
-                4
+                4,
+                interactables
             )
         ]
-        components[0].pos = vec2(10, 13);
-        const initObjects = [...backgrounds, ...components];
+        const initObjects = [...backgrounds, ...components, ...interactables];
         super(1, initObjects);
     }
 
