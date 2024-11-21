@@ -1,16 +1,6 @@
-(function(name,data){
- if(typeof onTileMapLoaded === 'undefined') {
-  if(typeof TileMaps === 'undefined') TileMaps = {};
-  TileMaps[name] = data;
- } else {
-  onTileMapLoaded(name,data);
- }
- if(typeof module === 'object' && module && module.exports) {
-  module.exports = data;
- }})("CafeLevel",
-{ "compressionlevel":-1,
+const CafeLevelData = {
  "height":19,
- "infinite":false,
+ "width":20,
  "layers":[
         {
          "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -33,14 +23,8 @@
             0, 108, 109, 108, 109, 108, 109, 108, 109, 108, 109, 108, 109, 108, 109, 108, 109, 108, 109, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
          "height":19,
-         "id":2,
          "name":"Ground",
-         "opacity":1,
-         "type":"tilelayer",
-         "visible":true,
          "width":20,
-         "x":0,
-         "y":0
         }, 
         {
          "data":[65, 67, 66, 67, 66, 66, 66, 67, 67, 66, 66, 66, 66, 67, 66, 67, 67, 66, 66, 68,
@@ -63,14 +47,8 @@
             107, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 110,
             121, 122, 122, 122, 122, 122, 124, 0, 0, 121, 124, 0, 0, 121, 122, 122, 122, 122, 122, 124],
          "height":19,
-         "id":9,
          "name":"Wall",
-         "opacity":1,
-         "type":"tilelayer",
-         "visible":true,
          "width":20,
-         "x":0,
-         "y":0
         }, 
         {
          "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -93,14 +71,8 @@
             0, 31, 31, 31, 31, 31, 0, 0, 0, 0, 0, 0, 0, 0, 31, 31, 31, 31, 31, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
          "height":19,
-         "id":5,
          "name":"Furniture",
-         "opacity":1,
-         "type":"tilelayer",
-         "visible":true,
          "width":20,
-         "x":0,
-         "y":0
         }, 
         {
          "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -123,14 +95,8 @@
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
          "height":19,
-         "id":7,
          "name":"Kitchen",
-         "opacity":1,
-         "type":"tilelayer",
-         "visible":true,
          "width":20,
-         "x":0,
-         "y":0
         }, 
         {
          "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -153,14 +119,9 @@
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
          "height":19,
-         "id":6,
          "name":"Signs",
-         "opacity":1,
-         "type":"tilelayer",
-         "visible":true,
          "width":20,
-         "x":0,
-         "y":0
+
         }, 
         {
          "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -183,28 +144,7 @@
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
          "height":19,
-         "id":8,
          "name":"Appliances",
-         "opacity":1,
-         "type":"tilelayer",
-         "visible":true,
          "width":20,
-         "x":0,
-         "y":0
         }],
- "nextlayerid":10,
- "nextobjectid":1,
- "orientation":"orthogonal",
- "renderorder":"right-down",
- "tiledversion":"1.11.0",
- "tileheight":16,
- "tilesets":[
-        {
-         "firstgid":1,
-         "source":"..\/..\/ignore\/neko-cafe-furnitures.tsx"
-        }],
- "tilewidth":16,
- "type":"map",
- "version":"1.10",
- "width":20
-});
+}
