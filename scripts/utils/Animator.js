@@ -21,4 +21,12 @@ class Animator {
         }
         drawTile(pos, size, this.states[this.activeState][this.currAnimFrame]);
     }
+
+    getFrame() {
+        if (this.timer.elapsed()) {
+            this.currAnimFrame = (this.currAnimFrame + 1) % this.states[this.activeState].length;
+            this.timer.set(this.delay);
+        }
+        return this.states[this.activeState][this.currAnimFrame];
+    }
 }

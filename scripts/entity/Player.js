@@ -1,8 +1,7 @@
-class Player {
+class Player extends EngineObject {
     constructor(pos, size, animator, speed, interactables)
     {
-        this.pos = pos;
-        this.size = size;
+        super(pos, size, animator.getFrame(), 0, undefined, 0);
         this.animator = animator;
         this.speed = speed;
         this.interactables = interactables;
@@ -10,27 +9,32 @@ class Player {
 
     update()
     {
-        let dest = vec2(this.pos);
         if (keyIsDown("KeyW")) {
-            dest.y += timeDelta * this.speed;
+            this.velocity.x = 0;
+            this.velocity.y = (this.speed * timeDelta);
             this.animator.setState("back");
         }
         else if (keyIsDown("KeyA")) {
-            dest.x -= timeDelta * this.speed;
+            this.velocity.x = -(this.speed * timeDelta);
+            this.velocity.y = 0;
             this.animator.setState("left");
         }
         else if (keyIsDown("KeyS")) {
-            dest.y -= timeDelta * this.speed;
+            this.velocity.x = 0;
+            this.velocity.y = -(this.speed * timeDelta);
             this.animator.setState("front");
         }
         else if (keyIsDown("KeyD")) {
-            dest.x += timeDelta * this.speed;
+            this.velocity.x = (this.speed * timeDelta);
+            this.velocity.y = 0;
             this.animator.setState("right");
         }
-
-        if (dest.y > 12 && dest.y < 14 && dest.x > 1 && dest.x < 19) {
-            this.pos = dest;
+        else {
+            this.velocity.x = 0;
+            this.velocity.y = 0;
         }
+
+        super.update();
 
         if (keyWasPressed("KeyE")) {
             for (const i of this.interactables) {
@@ -44,7 +48,8 @@ class Player {
 
     render()
     {
-        this.animator.render(this.pos, this.size);
+        this.tileInfo = this.animator.getFrame();
+        super.render();
     }
 
     renderPost() {
