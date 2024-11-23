@@ -1,9 +1,8 @@
 // Main gameplay hub
 class Cafe extends Scene {
     constructor() {
-        const backgrounds = [];
         const interactables = [
-            new Interactable(vec2(10, 13), vec2(1), () => console.log("here"))
+            new Interactable(vec2(10, 13), vec2(1), () => console.log("here"), "hello", true)
         ]
         const components = [
             new Player(
@@ -14,11 +13,14 @@ class Cafe extends Scene {
                 interactables
             )
         ]
-        const initObjects = [...backgrounds, ...components, ...interactables];
+        const initObjects = [...components, ...interactables];
         super(1, initObjects);
+        this.player = components[0];
     }
 
     init() {
+        sceneManager.setPlayer(this.player);
+
         const cafeSize = vec2(CafeLevelData.width, CafeLevelData.height);
         initTileCollision(cafeSize);
         this.tileLayers = [];
