@@ -4,21 +4,20 @@ class Cafe extends Scene {
         const interactables = [
             new Interactable(vec2(10, 13), vec2(1), () => console.log("here"), "hello", true)
         ]
-        const components = [
-            new Player(
-                vec2(10, 13),
-                vec2(1),
-                PlayerAnims,
-                4,
-                interactables
-            )
-        ]
+        const components = [];
         const initObjects = [...components, ...interactables];
         super(1, initObjects);
-        this.player = components[0];
+        this.interactables = interactables;
     }
 
     init() {
+        this.player = new Player(
+            vec2(10, 13),
+            vec2(1),
+            PlayerAnims,
+            4,
+            this.interactables
+        )
         sceneManager.setPlayer(this.player);
 
         const cafeSize = vec2(CafeLevelData.width, CafeLevelData.height);
@@ -56,6 +55,9 @@ class Cafe extends Scene {
     }
 
     destroy () {
+        this.player.destroy();
+        sceneManager.setPlayer(undefined);
+
         for (const layer of this.tileLayers) {
             layer.destroy();
         }
