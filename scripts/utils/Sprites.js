@@ -9,7 +9,9 @@ const sprites = [
     "sprites/UI/book.png",
     "sprites/UI/recipe.png",
     "sprites/UI/order.png",
-    "sprites/UI/bookmark.png"
+    "sprites/UI/bookmark.png",
+    "sprites/UI/notebook.png",
+    "sprites/UI/menu.png"
 ]
 const TitleBackground = new TileInfo(
     vec2(0, 0),
@@ -45,6 +47,21 @@ const BookmarkIcon = new TileInfo(
     vec2(0, 0),
     vec2(100, 100),
     8
+)
+const NotebookFirstPage = new TileInfo(
+    vec2(0, 0),
+    vec2(100 , 100),
+    9
+)
+const NotebookSecondPage = new TileInfo(
+    vec2(100, 0),
+    vec2(100, 100),
+    9
+)
+const CafeMenu = new TileInfo(
+    vec2(0, 0),
+    vec2(100, 100),
+    10
 )
 
 const CafeTileMap = new TileInfo(vec2(), TILE_SIZE, 2);
