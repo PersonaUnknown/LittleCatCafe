@@ -1,8 +1,10 @@
 class Meter {
-    constructor(pos, size, progress) {
+    constructor(pos, size, progress, visible = false) {
         this.pos = pos;
         this.size = size;
         this.progress = progress;
+        this.tileInfo = Divider;
+        this.visible = visible;
     }
     adjustProgress(progress) {
         this.progress = Math.max(Math.min(progress, 1), 0);
@@ -14,6 +16,7 @@ class Meter {
         
     }
     renderPost() {
+        if (!this.visible) return;
         // Draw the background of the meter
         drawTile(
             this.pos,

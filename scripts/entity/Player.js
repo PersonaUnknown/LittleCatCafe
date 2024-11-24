@@ -6,6 +6,7 @@ class Player extends EngineObject {
         this.speed = speed;
         this.interactables = interactables;
         this.collideTiles = true;
+        this.item = undefined;
     }
 
     update()
@@ -40,7 +41,7 @@ class Player extends EngineObject {
         if (keyWasPressed("KeyE")) {
             for (const i of this.interactables) {
                 if (i.isWithin(this.pos)) {
-                    i.run();
+                    i.run(this.item);
                     break;
                 }
             }
