@@ -1,13 +1,17 @@
 // Main gameplay hub
 class Cafe extends Scene {
     constructor() {
+        const minigameManager = initMinigames();
         const interactables = [
-            new Interactable(vec2(10, 13), vec2(1), () => console.log("here"), "hello", true)
+            new Interactable(vec2(5, 14), vec2(1), () => sceneManager.player.item = ITEMS.bread, "Fridge", true),
+            new Interactable(vec2(14, 14), vec2(1), minigameManager.toaster.interact.bind(minigameManager.toaster), "Toaster", true),
         ]
         const components = [];
-        const initObjects = [...components, ...interactables];
+        const initObjects = [...components, ...interactables, ...Object.values(minigameManager), minigameManager.toaster.progressBar];
         super(1, initObjects);
+
         this.interactables = interactables;
+        this.minigameManager = minigameManager;
     }
 
     init() {
