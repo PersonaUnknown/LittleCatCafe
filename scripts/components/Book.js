@@ -7,7 +7,7 @@ class Task {
         drawTextScreen(
             this.order,
             this.pos,
-            35,
+            20,
             rgb(0, 0, 0),
             0,
             rgb(0, 0, 0),
@@ -25,7 +25,7 @@ class Recipe {
         drawTextScreen(
             this.food,
             this.pos,
-            35,
+            20,
             rgb(0, 0, 0),
             0,
             rgb(0, 0, 0),
@@ -40,49 +40,49 @@ class Book {
         this.recipes = [];
         this.navButtons = [
             new IconButton(
-                OrderIcon,
-                vec2(5.25, 15.5),
-                vec2(2, 2),
+                LeftArrow,
+                vec2(21, 4),
+                vec2(1, 1),
                 new Label(
                     "",
                     new vec2(0, 0),
                     75,
                     rgb(0, 0, 0, 1)
                 ),
-                vec2(5.25, 15.5), 
-                vec2(4, 3),
+                vec2(21, 4), 
+                vec2(1, 1),
                 () => { 
                     this.switchTabs(0);
                 },
-                rgb(1, 1, 1, 1),
-                rgb(0, 1, 1, 1),      
+                rgb(0, 0, 0, 0),
+                rgb(0, 0, 0, 0),      
                 true
             ),
             new IconButton(
-                RecipeIcon,
-                vec2(9.25, 15.5),
-                vec2(2, 2),
+                RightArrow,
+                vec2(27.25, 4),
+                vec2(1, 1),
                 new Label(
                     "",
                     new vec2(0, 0),
                     75,
                     rgb(0, 0, 0, 1)
                 ),
-                vec2(9.25, 15.5), 
-                vec2(4, 3),
+                vec2(27.25, 4), 
+                vec2(1, 1),
                 () => { 
                     this.switchTabs(1);
                 },
-                rgb(1, 1, 1, 1),
-                rgb(0, 1, 1, 1),
+                rgb(0, 0, 0, 0),
+                rgb(0, 0, 0, 0),
                 true
             )
         ]
         this.navButtons[0].toggleOn();
-        this.isHidden = true;
+        this.isHidden = false;
     }
     toggleVisibility() {
-        this.isHidden = !this.isHidden;
+        // this.isHidden = !this.isHidden;
     }
     switchTabs(index) {
         this.index = index;
@@ -96,23 +96,23 @@ class Book {
         }
     }
     appendTask(order) {
-        const offset = 0.05;
+        const offset = 0.035;
         const length = this.tasks.length;
-        const newYPos = mainCanvasSize.y * (0.325 + length * offset)
+        const newYPos = mainCanvasSize.y * (0.295 + length * offset)
         const newTask = new Task(
             order,
-            vec2(mainCanvasSize.x * 0.38, newYPos),
+            vec2(mainCanvasSize.x * 0.81, newYPos),
         )
         this.tasks.push(newTask);
     }
     appendRecipe(food, ingredients) {
-        const offset = 0.05;
+        const offset = 0.035;
         const length = this.recipes.length;
-        const newYPos = mainCanvasSize.y * (0.325 + length * offset)
+        const newYPos = mainCanvasSize.y * (0.295 + length * offset)
         const newRecipe = new Recipe(
             food,
             ingredients,
-            vec2(mainCanvasSize.x * 0.38, newYPos),
+            vec2(mainCanvasSize.x * 0.81, newYPos),
         )
         this.recipes.push(newRecipe);
     }
@@ -121,16 +121,6 @@ class Book {
             return;
         }
         
-        let index = this.index;
-        if (keyWasPressed('KeyQ')) {
-            index = Math.max(this.index - 1, 0);
-        } else if (keyWasPressed('KeyE')) {
-            index = Math.min(this.index + 1, this.navButtons.length - 1);
-        }
-        if (this.index !== index) {
-            this.switchTabs(index);
-        }
-
         for (const button of this.navButtons) {
             button.update();
         }
@@ -145,21 +135,23 @@ class Book {
 
         // Draw the background of the book
         drawTile(
-            vec2(10, 10),
-            vec2(15, 15),
-            BookSprite
+            vec2(24, 9),
+            vec2(12, 12),
+            this.index > 0 ? NotebookSecondPage : NotebookFirstPage
         )
 
         // Draw Nav Buttons
-        for (const button of this.navButtons) {
-            button.renderPost();
+        if (this.index > 0) {
+            this.navButtons[0].renderPost();
+        } else if (this.index < 1) {
+            this.navButtons[1].renderPost();
         }
 
         // Draw the text of the current information required
         drawTextScreen(
             this.index === 0 ? "Orders" : "Recipes",
-            vec2(mainCanvasSize.x * 0.38, mainCanvasSize.y * 0.275),
-            45,
+            vec2(mainCanvasSize.x * 0.81, mainCanvasSize.y * 0.26),
+            20,
             rgb(0, 0, 0),
             0,
             rgb(0, 0, 0),

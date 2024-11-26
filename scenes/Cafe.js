@@ -6,7 +6,12 @@ class Cafe extends Scene {
             new Interactable(vec2(5, 14), vec2(1), () => sceneManager.player.item = ITEMS.bread, "Fridge", true),
             new Interactable(vec2(14, 14), vec2(1), minigameManager.toaster.interact.bind(minigameManager.toaster), "Toaster", true),
         ]
-        const components = [];
+        const components = [
+            new Menu(
+                vec2(-6, 14.5),
+                vec2(11.5, 11.5)
+            )
+        ];
         const initObjects = [...components, ...interactables, ...Object.values(minigameManager), minigameManager.toaster.progressBar];
         super(1, initObjects);
 
