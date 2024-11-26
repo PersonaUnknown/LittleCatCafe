@@ -1,12 +1,22 @@
 class Player extends EngineObject {
-    constructor(pos, size, animator, speed, interactables)
+    constructor(pos, size, animator, speed, interactables, inventory)
     {
         super(pos, size, animator.getFrame(), 0, undefined, 0);
         this.animator = animator;
         this.speed = speed;
         this.interactables = interactables;
+        this.inventory = inventory;
         this.collideTiles = true;
         this.item = null;
+    }
+
+    setItem(item) {
+        if (item === undefined || item >= FoodSprites.length) {
+            console.warn("Invalid item id: " + item);
+            item = null;
+        }
+        this.item = item;
+        this.inventory.updateItem(FoodSprites[item]);
     }
 
     update()

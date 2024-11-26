@@ -2,14 +2,13 @@
 class Cafe extends Scene {
     constructor() {
         const minigameManager = initMinigames();
-        const inventory = new Inventory();
+        // const inventory = new Inventory();
         const containers = [
             new FoodContainer(
                 [
                     // [DebugFood, "Bread"],
                     // [DebugFood2, "Zako"]
                 ],
-                inventory
             )
         ]
         const interactables = [
@@ -17,7 +16,7 @@ class Cafe extends Scene {
                 vec2(5, 14), 
                 vec2(1), 
                 () => {
-                    sceneManager.player.item = ITEMS.bread
+                    sceneManager.player.setItem(ITEMS.bread);
                     containers[0].showMenu();
                 }, 
                 "Fridge", 
@@ -26,16 +25,18 @@ class Cafe extends Scene {
             new Interactable(vec2(14, 14), vec2(1), minigameManager.toaster.interact.bind(minigameManager.toaster), "Toaster", true),
         ]
         const components = [
+            new Inventory(),
             new Menu(
                 vec2(-6, 14.5),
                 vec2(11.5, 11.5)
             )
         ];
-        const initObjects = [...components, ...interactables, ...containers, ...Object.values(minigameManager), minigameManager.toaster.progressBar, inventory];
+        const initObjects = [...components, ...interactables, ...containers, ...Object.values(minigameManager), minigameManager.toaster.progressBar];
         super(1, initObjects);
 
         this.interactables = interactables;
         this.minigameManager = minigameManager;
+        this.inventory = components[0];
     }
 
     init() {
@@ -44,7 +45,8 @@ class Cafe extends Scene {
             vec2(1),
             PlayerAnims,
             4,
-            this.interactables
+            this.interactables,
+            this.inventory
         )
         sceneManager.setPlayer(this.player);
 

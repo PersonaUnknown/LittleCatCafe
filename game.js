@@ -15,7 +15,7 @@ function gameInit()
         new Cafe(sceneManager)
     ]
     sceneManager.scenes = buildScenes;
-    loadLevel();
+    registerPostStartupSprites();
 }
 
 function gameUpdate()

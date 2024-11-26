@@ -12,7 +12,8 @@ const sprites = [
     "sprites/UI/bookmark.png",
     "sprites/UI/notebook.png",
     "sprites/UI/menu.png",
-    "sprites/UI/icon_play_outline.png"
+    "sprites/UI/icon_play_outline.png",
+    "sprites/food.png",
 ]
 const TitleBackground = new TileInfo(
     vec2(0, 0),
@@ -113,3 +114,11 @@ const PlayerAnims = new Animator(
     0.5,
     "front"
 )
+
+const FoodSprites = {};
+
+function registerPostStartupSprites() {
+    for (const i of Object.values(ITEMS)) {
+        FoodSprites[i] = tile(i, 32, 12);
+    }
+}
