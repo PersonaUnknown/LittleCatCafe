@@ -9,7 +9,7 @@ class SceneManager {
     constructor(index, scenes) {
         this.index = index;
         this.scenes = scenes;
-        this.player = undefined;
+        this.player = null;
     }
     update() {
         const index = this.index;
@@ -39,7 +39,7 @@ class SceneManager {
         let sceneId = SceneList[scene];
         if (this.index !== sceneId) {
             this.scenes[this.index].destroy();
-            this.player = undefined;
+            this.player = null;
             this.index = sceneId;
             this.scenes[this.index].init();
         }

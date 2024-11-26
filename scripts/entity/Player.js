@@ -6,7 +6,7 @@ class Player extends EngineObject {
         this.speed = speed;
         this.interactables = interactables;
         this.collideTiles = true;
-        this.item = undefined;
+        this.item = null;
     }
 
     update()

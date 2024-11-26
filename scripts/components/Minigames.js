@@ -8,14 +8,14 @@ function initMinigames() {
 
         interact(item) {
             if (this.active) return;
-            if (this.done && item === undefined) {
+            if (this.done && item === null) {
                 sceneManager.player.item = ITEMS.toast;
                 this.done = false;
             }
             else if (!this.done && item === ITEMS.bread) {
                 this.active = true;
                 this.timer.set(this.delay);
-                sceneManager.player.item = undefined;
+                sceneManager.player.item = null;
             }
         }
 

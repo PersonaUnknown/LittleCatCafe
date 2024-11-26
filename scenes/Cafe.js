@@ -84,7 +84,7 @@ class Cafe extends Scene {
 
     destroy () {
         this.player.destroy();
-        sceneManager.setPlayer(undefined);
+        sceneManager.setPlayer(null);
 
         for (const layer of this.tileLayers) {
             layer.destroy();
