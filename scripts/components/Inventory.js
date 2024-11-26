@@ -31,7 +31,7 @@ class Inventory {
         // Render Item Inside UI
         drawTile(
             position,
-            vec2(2, 2),
+            vec2(2.5, 2.5),
             this.item
         )
     }

@@ -43,8 +43,6 @@ function gameRenderPost()
     // called after objects are rendered
     // draw effects or hud that appear above all objects
     sceneManager.renderPost();
-    const inventory = new Inventory();
-    inventory.renderPost();
 }
 
 // Startup LittleJS Engine

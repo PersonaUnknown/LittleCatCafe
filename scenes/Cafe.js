@@ -2,8 +2,27 @@
 class Cafe extends Scene {
     constructor() {
         const minigameManager = initMinigames();
+        const inventory = new Inventory();
+        const containers = [
+            new FoodContainer(
+                [
+                    // [DebugFood, "Bread"],
+                    // [DebugFood2, "Zako"]
+                ],
+                inventory
+            )
+        ]
         const interactables = [
-            new Interactable(vec2(5, 14), vec2(1), () => sceneManager.player.item = ITEMS.bread, "Fridge", true),
+            new Interactable(
+                vec2(5, 14), 
+                vec2(1), 
+                () => {
+                    sceneManager.player.item = ITEMS.bread
+                    containers[0].showMenu();
+                }, 
+                "Fridge", 
+                true
+            ),
             new Interactable(vec2(14, 14), vec2(1), minigameManager.toaster.interact.bind(minigameManager.toaster), "Toaster", true),
         ]
         const components = [
@@ -12,7 +31,7 @@ class Cafe extends Scene {
                 vec2(11.5, 11.5)
             )
         ];
-        const initObjects = [...components, ...interactables, ...Object.values(minigameManager), minigameManager.toaster.progressBar];
+        const initObjects = [...components, ...interactables, ...containers, ...Object.values(minigameManager), minigameManager.toaster.progressBar, inventory];
         super(1, initObjects);
 
         this.interactables = interactables;
@@ -75,8 +94,5 @@ class Cafe extends Scene {
 
     update() {
         super.update();
-        if (keyWasPressed('KeyF')) {
-            this.book.toggleVisibility();
-        }
     }
 }

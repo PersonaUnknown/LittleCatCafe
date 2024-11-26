@@ -137,7 +137,7 @@ class Book {
         drawTile(
             vec2(24, 9),
             vec2(12, 12),
-            this.index > 0 ? NotebookSecondPage : NotebookFirstPage
+            this.index > 0 ? NotebookFirstPage : NotebookSecondPage
         )
 
         // Draw Nav Buttons
