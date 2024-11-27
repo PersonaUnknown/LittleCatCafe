@@ -43,6 +43,18 @@ class Credits extends Scene {
                     "Noun Project - Order"
                 ]
             },
+            {
+                creator: "Najmah Salam",
+                assets: [
+                    "Naj's Baked Good Assets"
+                ]
+            },
+            {
+                creator: "karsiori",
+                asses: [
+                    "Pixel Art Food Pack"
+                ]
+            }
         ]
         const backgrounds = [
 
