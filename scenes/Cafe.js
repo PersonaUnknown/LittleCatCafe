@@ -2,6 +2,7 @@
 class Cafe extends Scene {
     constructor() {
         const minigameManager = initMinigames();
+        const customerManager = new CustomerManager();
         const components = [
             new Inventory(),
             new Menu(
@@ -55,11 +56,12 @@ class Cafe extends Scene {
                 true
             )
         ]
-        const initObjects = [...components, ...interactables, ...containers, ...Object.values(minigameManager), minigameManager.toaster.progressBar];
+        const initObjects = [customerManager, ...components, ...interactables, ...containers, ...Object.values(minigameManager), minigameManager.toaster.progressBar];
         super(1, initObjects);
 
         this.interactables = interactables;
         this.minigameManager = minigameManager;
+        this.customerManager = customerManager;
         this.inventory = components[0];
     }
 
@@ -102,8 +104,6 @@ class Cafe extends Scene {
         setCameraPos(vec2(8));
     
         this.book = new Book();
-        this.book.appendTask("Toast x1");
-        this.book.appendTask("Parfait x2");
         this.book.appendRecipe("Toast", "");
         this.addObject(this.book);
     }

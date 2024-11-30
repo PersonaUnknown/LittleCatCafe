@@ -1,4 +1,5 @@
 let sceneManager;
+let cafe;
 let book;
 function gameInit()
 {
@@ -11,9 +12,10 @@ function gameInit()
         startingIndex,
         [],
     )
+    cafe = new Cafe(sceneManager);
     const buildScenes = [
         new TitleScreen(sceneManager),
-        new Cafe(sceneManager)
+        cafe
     ]
     sceneManager.scenes = buildScenes;
 }
