@@ -42,7 +42,7 @@ class Cafe extends Scene {
     init() {
         this.player = new Player(
             vec2(10, 13),
-            vec2(1),
+            vec2(0.9),
             PlayerAnims,
             4,
             this.interactables,
