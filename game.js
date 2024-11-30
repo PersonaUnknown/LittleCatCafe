@@ -5,6 +5,7 @@ function gameInit()
     // called once after the engine starts up
     // setup the game
     setCanvasFixedSize(vec2(width, height));
+    registerPostStartupSprites();
     const startingIndex = 0;
     sceneManager = new SceneManager(
         startingIndex,
@@ -15,7 +16,6 @@ function gameInit()
         new Cafe(sceneManager)
     ]
     sceneManager.scenes = buildScenes;
-    registerPostStartupSprites();
 }
 
 function gameUpdate()

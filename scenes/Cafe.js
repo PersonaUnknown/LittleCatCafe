@@ -2,28 +2,6 @@
 class Cafe extends Scene {
     constructor() {
         const minigameManager = initMinigames();
-        // const inventory = new Inventory();
-        const containers = [
-            new FoodContainer(
-                [
-                    // [DebugFood, "Bread"],
-                    // [DebugFood2, "Zako"]
-                ],
-            )
-        ]
-        const interactables = [
-            new Interactable(
-                vec2(5, 14), 
-                vec2(1), 
-                () => {
-                    sceneManager.player.setItem(ITEMS.bread);
-                    containers[0].showMenu();
-                }, 
-                "Fridge", 
-                true
-            ),
-            new Interactable(vec2(14, 14), vec2(1), minigameManager.toaster.interact.bind(minigameManager.toaster), "Toaster", true),
-        ]
         const components = [
             new Inventory(),
             new Menu(
@@ -31,6 +9,52 @@ class Cafe extends Scene {
                 vec2(11.5, 11.5)
             )
         ];
+        const containers = [
+            new FoodContainer(
+                [
+                    [FoodSprites[ITEMS.bread], ITEMS.bread],
+                    [FoodSprites[ITEMS.donut], ITEMS.donut]
+                ],
+                components[0]
+            ),
+            new FoodContainer(
+                [
+                    [FoodSprites[ITEMS.muffin], ITEMS.muffin],
+                    [FoodSprites[ITEMS.donut], ITEMS.donut]
+                ],
+                components[0]
+            )
+        ]
+        const interactables = [
+            new Interactable(
+                vec2(5, 14), 
+                vec2(1), 
+                () => {
+                    containers[0].showMenu();
+                }, 
+                "Fridge", 
+                true
+            ),
+            new Interactable(vec2(14, 14), vec2(1), minigameManager.toaster.interact.bind(minigameManager.toaster), "Toaster", true),
+            new Interactable(
+                vec2(8, 9),
+                vec2(1),
+                () => {
+                    // TODO: Add customer functionality
+                },
+                "Register",
+                true
+            ),
+            new Interactable(
+                vec2(14, 10),
+                vec2(4, 1),
+                () => {
+                    containers[1].showMenu();
+                },
+                "Pastries",
+                true
+            )
+        ]
         const initObjects = [...components, ...interactables, ...containers, ...Object.values(minigameManager), minigameManager.toaster.progressBar];
         super(1, initObjects);
 

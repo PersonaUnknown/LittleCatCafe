@@ -1,5 +1,5 @@
 class Food {
-    constructor(sprite, pos, name, container) {
+    constructor(sprite, pos, index, container) {
         this.sprite = sprite;
         this.pos = pos;
         this.name = name;
@@ -16,9 +16,8 @@ class Food {
             this.pos, 
             vec2(2.5, 2.5),
             () => { 
-                console.log(this.name);
-                container.updateInventory(this.sprite);
                 container.closeMenu();
+                sceneManager.player.setItem(index);
             },
             rgb(1, 0, 0, 0),
             rgb(1, 1, 0, 0),

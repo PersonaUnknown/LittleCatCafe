@@ -14,6 +14,7 @@ const sprites = [
     "sprites/UI/menu.png",
     "sprites/UI/icon_play_outline.png",
     "sprites/food.png",
+    "sprites/UI/emoticons.png"
 ]
 const TitleBackground = new TileInfo(
     vec2(0, 0),
@@ -75,6 +76,28 @@ const LeftArrow = new TileInfo(
     vec2(34, 38),
     11
 )
+const Emoticons = [
+    new TileInfo(
+        vec2(48, 16),
+        vec2(16, 16),
+        13
+    ),
+    new TileInfo(
+        vec2(64, 16),
+        vec2(16, 16),
+        13
+    ),
+    new TileInfo(
+        vec2(80, 16),
+        vec2(16, 16),
+        13
+    ),
+    new TileInfo(
+        vec2(48, 0),
+        vec2(16, 16),
+        13
+    ),
+]
 
 const CafeTileMap = new TileInfo(vec2(), TILE_SIZE, 2);
 
