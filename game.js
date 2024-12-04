@@ -15,7 +15,8 @@ function gameInit()
     cafe = new Cafe(sceneManager);
     const buildScenes = [
         new TitleScreen(sceneManager),
-        cafe
+        cafe,
+        new CoffeeScene(),
     ]
     sceneManager.scenes = buildScenes;
 }
