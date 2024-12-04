@@ -7,18 +7,12 @@ class Draggable {
         this.dragging = false;
     }
 
-    isWithin(point) {
-        const left = this.pos.x;
-        const top = this.pos.y;
-        return point.x > left && point.x < (left + this.size.x) && point.y > (top - this.size.y) && point.y < top;
-    }
-
     update() {
-        if (mouseWasReleased()) {
+        if (mouseWasReleased(0)) {
             this.dragging = false;
             return;
         }
-        if (mouseWasPressed() && this.isWithin(mousePos)) {
+        if (mouseWasPressed(0) && isPointWithinBox(mousePos, this.pos, this.size)) {
             this.dragging = true;
         }
     }
@@ -29,7 +23,7 @@ class Draggable {
 
     renderPost() {
         if (this.dragging) {
-            drawTile(mousePos, vec2(0.5), this.tileInfo);
+            drawTile(mousePos, this.size.scale(0.5), this.tileInfo);
         }
     }
 }
@@ -43,14 +37,8 @@ class DragReceiver {
         this.callback = callback;
     }
 
-    isWithin(point) {
-        const left = this.pos.x;
-        const top = this.pos.y;
-        return point.x > left && point.x < (left + this.size.x) && point.y > (top - this.size.y) && point.y < top;
-    }
-
     update() {
-        if (mouseWasReleased() && this.isWithin(mousePos)) {
+        if (mouseWasReleased(0) && isPointWithinBox(mousePos, this.pos, this.size)) {
             for (const i of this.draggables) {
                 if (i.dragging) {
                     this.callback(i.data);
