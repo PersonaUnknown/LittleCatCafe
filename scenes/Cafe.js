@@ -54,7 +54,7 @@ class Cafe extends Scene {
                 true
             )
         ]
-        const initObjects = [customerManager, ...components, ...interactables, ...containers, ...Object.values(minigameManager), minigameManager.toaster.progressBar];
+        const initObjects = [customerManager, ...components, ...interactables, ...containers, ...Object.values(minigameManager)];
         super(1, initObjects);
 
         this.interactables = interactables;

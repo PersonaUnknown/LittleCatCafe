@@ -39,10 +39,16 @@ function initMinigames() {
             if (this.active) {
                 this.progressBar.adjustProgress(this.timer.getPercent());
             }
+            this.progressBar.update();
         }
 
-        render() {}
-        renderPost() {}
+        render() {
+            this.progressBar.render();
+        }
+
+        renderPost() {
+            this.progressBar.renderPost();
+        }
     }
 
     return {
