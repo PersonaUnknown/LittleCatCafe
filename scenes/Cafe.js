@@ -15,15 +15,13 @@ class Cafe extends Scene {
                 [
                     [FoodSprites[ITEMS.bread], ITEMS.bread],
                     [FoodSprites[ITEMS.donut], ITEMS.donut]
-                ],
-                components[0]
+                ]
             ),
             new FoodContainer(
                 [
                     [FoodSprites[ITEMS.muffin], ITEMS.muffin],
                     [FoodSprites[ITEMS.donut], ITEMS.donut]
-                ],
-                components[0]
+                ]
             )
         ]
         const interactables = [

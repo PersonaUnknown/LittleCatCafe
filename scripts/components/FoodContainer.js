@@ -39,10 +39,9 @@ class Food {
     }
 }
 class FoodContainer {
-    constructor(sprites, inventory) {
+    constructor(sprites) {
         this.foods = [];
         this.isHidden = true;
-        this.inventory = inventory;
         if (Array.isArray(sprites)) {
             let x = 3 
             let y = 11;
@@ -93,9 +92,6 @@ class FoodContainer {
         if (this.foods.length !== 0) {    
             this.isHidden = true;
         }
-    }
-    updateInventory(sprite) {
-        this.inventory.updateItem(sprite);
     }
     update() {
         if (this.isHidden) {
