@@ -18,7 +18,7 @@ class Customer {
         this.currentDestination = this.pos;
         this.moveSpeed = 0.02;
         this.targetDestination = [];
-        this.patience = 3;
+        this.patience = 15;
         this.timer = new Timer(this.patience / 3);
         this.onLeaveCallback = onLeaveCallback;
         this.index = index;
@@ -61,8 +61,8 @@ class Customer {
     generateOrder() {
         this.mood = CustomerMoods.NONE;
         const food = Object.keys(ITEMS);
-        // const random = Math.floor(Math.random() * food.length);
-        const random = 0;
+        const random = Math.floor(Math.random() * food.length);
+        // const random = 0;
         return food[random];
     }
     takeOrder() {
