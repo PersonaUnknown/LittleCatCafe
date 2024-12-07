@@ -18,14 +18,18 @@ class Customer {
         this.currentDestination = this.pos;
         this.moveSpeed = 0.02;
         this.targetDestination = [];
-        this.patience = 12;
-        this.timer = new Timer();
+        this.patience = 3;
+        this.timer = new Timer(this.patience / 3);
         this.onLeaveCallback = onLeaveCallback;
         this.index = index;
+        this.state = false; // True: Waiting in line, False: Ordering
         this.order = this.generateOrder();
     }
     setIndex(index) {
         this.index = index;
+    }
+    decrementIndex() {
+        this.index--;
     }
     travel(targetDestination) {
         this.travelTime = 0;
@@ -45,8 +49,8 @@ class Customer {
                 this.mood = CustomerMoods.IMPATIENT;
                 break;
             case "impatient":
-                // TODO: Have customer leave in frustration somehow
-                this.onLeaveCallback(this.index);
+                console.log(this.state);
+                this.onLeaveCallback(this.index, this.state);
                 this.mood = CustomerMoods.NONE;
                 break;
             case "none":
@@ -56,18 +60,7 @@ class Customer {
         this.timer.set(this.patience / 3)
     }
     generateOrder() {
-        // TODO: Add random customer order
-        // Easy Order - 50%, Medium Order - 35%, Hard Order - 15%
-        const rng = Math.random();
-        if (rng >= 0.85) {
-
-        } else if (rng >= 0.5) {
-
-        } else {
-
-        }
-
-        // TODO: Replace to just orders instead of all possible food sprites / items
+        this.mood = CustomerMoods.NONE;
         const food = Object.keys(ITEMS);
         // const random = Math.floor(Math.random() * food.length);
         const random = 0;

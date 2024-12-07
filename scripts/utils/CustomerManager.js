@@ -24,7 +24,9 @@ class CustomerManager {
                 vec2(10.5, orderOffset),
                 vec2(11.5, orderOffset)
             ]
+        this.orderingCustomers[0].state = true;
         this.orderingCustomers[0].travel(travelPath);
+        this.orderingCustomers[0].mood = CustomerMoods.NONE;
         this.orderingCustomers[0].setIndex(this.numWaitingCustomers);
         this.waitingCustomers.push(this.orderingCustomers[0]);
         this.orderingCustomers.shift();
@@ -46,7 +48,7 @@ class CustomerManager {
                 // Remove that customer and then have that customer leave
                 sceneManager.player.setItem(null);
                 this.onScoreIncreaseCallback(1);
-                this.onCustomerLeave(i, true);
+                this.onCustomerLeave(i);
                 break;
             }
         }
@@ -54,19 +56,24 @@ class CustomerManager {
     }
     onCustomerLeave(index, state=false) {
         // Move all the customers below the customer up one tile
-        if (this.numWaitingCustomers <= 0 || this.waitingCustomers === undefined) {
-            return;
-        }
-        this.waitingCustomers?.splice(index, 1);
-        cafe.book?.tasks.splice(index, 1);
-        for (let i = index; i < this.waitingCustomers.length; i++) {
-            this.waitingCustomers[i].travel([vec2(11.5, 6.75 - i)]);
-        }
-
-        this.numWaitingCustomers--;
-
-        if (state) {
-            // TODO: Add functionality for some score gain on successful customer leaving
+        if (!state && this.numOrderingCustomers > 0) {
+            this.orderingCustomers?.splice(index, 1);
+            for (let i = index; i < this.orderingCustomers.length; i++) {
+                this.orderingCustomers[i].travel([vec2(8.5, 6.75 - i)]);
+                this.orderingCustomers[i].decrementIndex();
+            }
+    
+            this.numOrderingCustomers--;
+        } 
+        if (state && this.numWaitingCustomers > 0) {
+            this.waitingCustomers?.splice(index, 1);
+            cafe.book?.tasks.splice(index, 1);
+            for (let i = index; i < this.waitingCustomers.length; i++) {
+                this.waitingCustomers[i].travel([vec2(11.5, 6.75 - i)]);
+                this.waitingCustomers[i].decrementIndex();
+            }
+    
+            this.numWaitingCustomers--;
         }
     }
     spawnCustomer() {
@@ -76,24 +83,19 @@ class CustomerManager {
         if (length >= this.maxCustomers) {
             return;
         }
-
         const yOffset = 6.75 - this.numOrderingCustomers;
-        const newCustomer = new Customer(vec2(8.5, 0), this.numOrderingCustomers, this.onCustomerLeave);
+        const newCustomer = new Customer(
+            vec2(8.5, 0), 
+            this.numOrderingCustomers, 
+            (index, state) => {
+                this.onCustomerLeave(index, state);
+            }
+        );
         this.numOrderingCustomers++; 
         newCustomer.travel([vec2(8.5, yOffset)]);
         this.orderingCustomers.push(newCustomer);
     }
     update() {
-        // TODO: Remove debug functionality
-        if (keyWasPressed("KeyG")) {
-            this.onCustomerOrder();
-        }
-        if (keyWasPressed("KeyH")) {
-            this.onCustomerOrderCheck();
-        }
-        if (keyWasPressed("KeyI")) {
-            this.onCustomerLeave(0);
-        }
         if (this.timer.elapsed()) {
             this.spawnCustomer();
         }
