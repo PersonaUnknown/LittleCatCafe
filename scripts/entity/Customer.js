@@ -11,7 +11,6 @@ const CustomerMoods = {
 };
 class Customer {
     constructor(pos, index, onLeaveCallback) {
-        this.sprite = new TileInfo(vec2(Math.floor(Math.random() * 5) * 16, 0), TILE_SIZE, 1),
         this.mood = CustomerMoods.NONE;
         this.pos = pos;
         this.travelTime = 0;
@@ -24,6 +23,56 @@ class Customer {
         this.index = index;
         this.state = false; // True: Waiting in line, False: Ordering
         this.order = this.generateOrder();
+        
+        // Determine animation
+        const rng = Math.random();
+        let spriteIndex = 5;
+        if (rng > 0.8) {
+            spriteIndex = 4;
+        } else if (rng > 0.6) {
+            spriteIndex = 3;
+        } else if (rng > 0.4) {
+            spriteIndex = 1;
+        } else if (rng > 0.2) {
+            spriteIndex = 0;
+        }
+        const spriteOffset = 16 * spriteIndex;
+        this.animator = new Animator(
+            {
+                "front" : [
+                    new TileInfo(vec2(48, spriteOffset), TILE_SIZE, 1),
+                    new TileInfo(vec2(64, spriteOffset), TILE_SIZE, 1),
+                    new TileInfo(vec2(80, spriteOffset), TILE_SIZE, 1),
+                    new TileInfo(vec2(96, spriteOffset), TILE_SIZE, 1),
+                ],
+                "back" : [
+                    new TileInfo(vec2(160, spriteOffset), TILE_SIZE, 1),
+                    new TileInfo(vec2(176, spriteOffset), TILE_SIZE, 1),
+                    new TileInfo(vec2(192, spriteOffset), TILE_SIZE, 1),
+                    new TileInfo(vec2(208, spriteOffset), TILE_SIZE, 1),
+                ],
+                "right" : [
+                    new TileInfo(vec2(224, spriteOffset), TILE_SIZE, 1),
+                    new TileInfo(vec2(240, spriteOffset), TILE_SIZE, 1),
+                    new TileInfo(vec2(256, spriteOffset), TILE_SIZE, 1),
+                    new TileInfo(vec2(272, spriteOffset), TILE_SIZE, 1),
+                    new TileInfo(vec2(288, spriteOffset), TILE_SIZE, 1),
+                    new TileInfo(vec2(304, spriteOffset), TILE_SIZE, 1),
+                    new TileInfo(vec2(320, spriteOffset), TILE_SIZE, 1),
+                ],
+                "left" : [
+                    new TileInfo(vec2(336, spriteOffset), TILE_SIZE, 1),
+                    new TileInfo(vec2(352, spriteOffset), TILE_SIZE, 1),
+                    new TileInfo(vec2(368, spriteOffset), TILE_SIZE, 1),
+                    new TileInfo(vec2(384, spriteOffset), TILE_SIZE, 1),
+                    new TileInfo(vec2(400, spriteOffset), TILE_SIZE, 1),
+                    new TileInfo(vec2(416, spriteOffset), TILE_SIZE, 1),
+                    new TileInfo(vec2(432, spriteOffset), TILE_SIZE, 1),
+                ]
+            },
+            0.4,
+            "back"
+        );
     }
     setIndex(index) {
         this.index = index;
@@ -77,17 +126,31 @@ class Customer {
         if (
             this.targetDestination.length > 0
         ) {
+            const directionCheck = this.currentDestination.subtract(this.targetDestination[0]);
+            if (directionCheck.x < 0) {
+                this.animator.setState("right");
+            } else if (directionCheck.x > 0) {
+                this.animator.setState("left");
+            } else if (directionCheck.y < 0) {
+                this.animator.setState("back");
+            } else {
+                this.animator.setState("front");
+            }
             this.travelTime += timeDelta;
             const distance = this.currentDestination.distance(this.targetDestination[0]);
-            this.pos.x = lerp(this.travelTime * this.moveSpeed / distance, this.currentDestination.x, this.targetDestination[0].x);
-            this.pos.y = lerp(this.travelTime * this.moveSpeed / distance, this.currentDestination.y, this.targetDestination[0].y);
+            this.pos.x = lerp(this.travelTime * this.moveSpeed, this.currentDestination.x, this.targetDestination[0].x);
+            this.pos.y = lerp(this.travelTime * this.moveSpeed, this.currentDestination.y, this.targetDestination[0].y);
             if (this.pos.distance(this.targetDestination[0]) <= 0.01) {
                 this.pos = this.targetDestination[0];
                 this.currentDestination = this.pos;
                 this.targetDestination.shift();
                 this.travelTime = 0;    
             }
+        } else {
+            this.animator.setState("back")
         }
+        
+        this.sprite = this.animator.getFrame();
     }
     render() {
 
