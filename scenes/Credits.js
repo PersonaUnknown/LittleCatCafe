@@ -51,15 +51,19 @@ class Credits extends Scene {
             },
             {
                 creator: "karsiori",
-                asses: [
+                assets: [
                     "Pixel Art Food Pack"
                 ]
             },
             {
                 creator: "katame13",
-                asses: [
+                assets: [
                     "CoffeeTools-16bit"
                 ]
+            },
+            {
+                creator: "Syafrizal a.k.a. Khurasan",
+                assets: "Life Kittie Font"
             }
         ]
         const backgrounds = [

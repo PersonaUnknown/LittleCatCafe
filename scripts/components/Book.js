@@ -105,6 +105,16 @@ class Book {
         )
         this.tasks.push(newTask);
     }
+    removeTask(index) {
+        const offset = 0.035;
+        this.tasks?.splice(index, 1);
+        for (let i = index; i < this.tasks.length; i++) {
+            this.tasks[i].pos = vec2(
+                mainCanvasSize.x * 0.81,
+                mainCanvasSize.y * (0.295 + i * offset)
+            );
+        }
+    }
     appendRecipe(food, ingredients) {
         const offset = 0.035;
         const length = this.recipes.length;
