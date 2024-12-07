@@ -8,10 +8,11 @@ class CustomerManager {
         this.updateRate = 5;   
         this.timer = new Timer(this.updateRate);
         this.maxCustomers = 6;
+        this.onScoreIncreaseCallback = null;
     }
     onCustomerOrder() {
         // Take customer's order and adjust queue position of remaining customers
-        if (this.numOrderingCustomers <= 0) {
+        if (this.numOrderingCustomers <= 0 || this.orderingCustomers[0].pos.distance(vec2(8.5, 6.75)) > 0.1) {
             return;
         }
         this.orderingCustomers[0].takeOrder();
@@ -23,7 +24,9 @@ class CustomerManager {
                 vec2(10.5, orderOffset),
                 vec2(11.5, orderOffset)
             ]
+        this.orderingCustomers[0].state = true;
         this.orderingCustomers[0].travel(travelPath);
+        this.orderingCustomers[0].mood = CustomerMoods.NONE;
         this.orderingCustomers[0].setIndex(this.numWaitingCustomers);
         this.waitingCustomers.push(this.orderingCustomers[0]);
         this.orderingCustomers.shift();
@@ -35,14 +38,18 @@ class CustomerManager {
             customer.travel([vec2(8.5, 6.75 - i)]);
             customer.setIndex(i);
         }
-        
     }
     onCustomerOrderCheck() {
         const item = sceneManager.player.item;
+        console.log(item);
         for (let i = 0; i < this.waitingCustomers.length; i++) {
             const customer = this.waitingCustomers[i];
-            if (customer.order === item) {
+            const order = ITEMS[customer.order];
+            console.log(order);
+            if (order === item) {
                 // Remove that customer and then have that customer leave
+                sceneManager.player.setItem(null);
+                this.onScoreIncreaseCallback(1);
                 this.onCustomerLeave(i, true);
                 break;
             }
@@ -51,19 +58,24 @@ class CustomerManager {
     }
     onCustomerLeave(index, state=false) {
         // Move all the customers below the customer up one tile
-        if (this.numWaitingCustomers <= 0 || this.waitingCustomers === undefined) {
-            return;
-        }
-        this.waitingCustomers?.splice(index, 1);
-        cafe.book?.tasks.splice(index, 1);
-        for (let i = index; i < this.waitingCustomers.length; i++) {
-            this.waitingCustomers[i].travel([vec2(11.5, 6.75 - i)]);
-        }
-
-        this.numWaitingCustomers--;
-
-        if (state) {
-            // TODO: Add functionality for some score gain on successful customer leaving
+        if (!state && this.numOrderingCustomers > 0) {
+            this.orderingCustomers?.splice(index, 1);
+            for (let i = index; i < this.orderingCustomers.length; i++) {
+                this.orderingCustomers[i].travel([vec2(8.5, 6.75 - i)]);
+                this.orderingCustomers[i].decrementIndex();
+            }
+    
+            this.numOrderingCustomers--;
+        } 
+        if (state && this.numWaitingCustomers > 0) {
+            this.waitingCustomers?.splice(index, 1);
+            cafe.book?.tasks.splice(index, 1);
+            for (let i = index; i < this.waitingCustomers.length; i++) {
+                this.waitingCustomers[i].travel([vec2(11.5, 6.75 - i)]);
+                this.waitingCustomers[i].decrementIndex();
+            }
+    
+            this.numWaitingCustomers--;
         }
     }
     spawnCustomer() {
@@ -73,24 +85,19 @@ class CustomerManager {
         if (length >= this.maxCustomers) {
             return;
         }
-
         const yOffset = 6.75 - this.numOrderingCustomers;
-        const newCustomer = new Customer(vec2(8.5, 0), this.numOrderingCustomers, this.onCustomerLeave);
+        const newCustomer = new Customer(
+            vec2(8.5, 0), 
+            this.numOrderingCustomers, 
+            (index, state) => {
+                this.onCustomerLeave(index, state);
+            }
+        );
         this.numOrderingCustomers++; 
         newCustomer.travel([vec2(8.5, yOffset)]);
         this.orderingCustomers.push(newCustomer);
     }
     update() {
-        // TODO: Remove debug functionality
-        if (keyWasPressed("KeyG")) {
-            this.onCustomerOrder();
-        }
-        if (keyWasPressed("KeyH")) {
-            this.onCustomerOrderCheck();
-        }
-        if (keyWasPressed("KeyI")) {
-            this.onCustomerLeave(0);
-        }
         if (this.timer.elapsed()) {
             this.spawnCustomer();
         }

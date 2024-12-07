@@ -28,9 +28,7 @@ class Cafe extends Scene {
             new Interactable(
                 vec2(5, 14), 
                 vec2(1), 
-                () => {
-                    containers[0].showMenu();
-                }, 
+                () => { containers[0].showMenu(); }, 
                 "Fridge", 
                 true
             ),
@@ -38,18 +36,21 @@ class Cafe extends Scene {
             new Interactable(
                 vec2(8, 9),
                 vec2(1),
-                () => {
-                    // TODO: Add customer functionality
-                },
+                () => { this.customerManager.onCustomerOrder(); },
                 "Register",
+                true
+            ),
+            new Interactable(
+                vec2(11, 9),
+                vec2(1),
+                () => { this.customerManager.onCustomerOrderCheck(); },
+                "Waiting Area",
                 true
             ),
             new Interactable(
                 vec2(14, 10),
                 vec2(4, 1),
-                () => {
-                    containers[1].showMenu();
-                },
+                () => { containers[1].showMenu(); },
                 "Pastries",
                 true
             ),
@@ -73,6 +74,11 @@ class Cafe extends Scene {
         this.customerManager = customerManager;
         this.inventory = components[0];
         this.playerPos = vec2(10, 13);
+        this.score = 0;
+    }
+
+    addScore(value) {
+        this.score += value;
     }
 
     init() {
@@ -117,6 +123,7 @@ class Cafe extends Scene {
         this.book = new Book();
         this.book.appendRecipe("Toast", "");
         this.addObject(this.book);
+        this.customerManager.onScoreIncreaseCallback = (value) => { this.addScore(value); }
     }
 
     destroy () {
