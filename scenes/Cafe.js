@@ -52,7 +52,18 @@ class Cafe extends Scene {
                 },
                 "Pastries",
                 true
-            )
+            ),
+            new Interactable(
+                vec2(6, 14),
+                vec2(1),
+                (item) => {
+                    this.playerPos = sceneManager.player.pos;
+                    if (item === ITEMS.coffee) sceneManager.switchScene("Coffee");
+                },
+                "Coffee station",
+                true
+            ),
+            new Interactable(vec2(7, 14), vec2(1), () => sceneManager.player.setItem(ITEMS.coffee), "Coffee machine", true)
         ]
         const initObjects = [customerManager, ...components, ...interactables, ...containers, ...Object.values(minigameManager)];
         super(1, initObjects);
@@ -61,11 +72,12 @@ class Cafe extends Scene {
         this.minigameManager = minigameManager;
         this.customerManager = customerManager;
         this.inventory = components[0];
+        this.playerPos = vec2(10, 13);
     }
 
     init() {
         this.player = new Player(
-            vec2(10, 13),
+            this.playerPos,
             vec2(0.9),
             PlayerAnims,
             4,
@@ -100,7 +112,8 @@ class Cafe extends Scene {
             currLayer.redraw();
         }
         setCameraPos(vec2(8));
-    
+
+        // TODO move this to constructor
         this.book = new Book();
         this.book.appendRecipe("Toast", "");
         this.addObject(this.book);
@@ -114,9 +127,5 @@ class Cafe extends Scene {
             layer.destroy();
         }
         this.tileLayers = [];
-    }
-
-    update() {
-        super.update();
     }
 }
