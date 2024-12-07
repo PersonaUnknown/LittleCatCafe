@@ -3,6 +3,7 @@ class CustomerManager {
     constructor() {
         this.orderingCustomers = [];
         this.waitingCustomers = [];
+        this.leavingCustomers = [];
         this.numOrderingCustomers = 0;
         this.numWaitingCustomers = 0;
         this.updateRate = 5;   
@@ -54,9 +55,23 @@ class CustomerManager {
         }
 
     }
+    onCustomerExit(index) {
+        this.leavingCustomers?.splice(index, 1);
+        for (let i = index; i < this.leavingCustomers.length; i++) {
+            this.leavingCustomers[i].decrementIndex();
+        }
+    }
     onCustomerLeave(index, state=false) {
         // Move all the customers below the customer up one tile
         if (!state && this.numOrderingCustomers > 0) {
+            this.leavingCustomers.push(this.orderingCustomers[index]);
+            const leavingPos = this.orderingCustomers[index].pos;
+            this.orderingCustomers[index].travel([
+                vec2(7.5, leavingPos.y),
+                vec2(7.5, 0)
+            ]);
+            const length = this.leavingCustomers.length - 1;
+            this.leavingCustomers[length].setIndex(length);
             this.orderingCustomers?.splice(index, 1);
             for (let i = index; i < this.orderingCustomers.length; i++) {
                 this.orderingCustomers[i].travel([vec2(8.5, 6.75 - i)]);
@@ -66,6 +81,14 @@ class CustomerManager {
             this.numOrderingCustomers--;
         } 
         if (state && this.numWaitingCustomers > 0) {
+            this.leavingCustomers.push(this.waitingCustomers[index]);
+            const leavingPos = this.waitingCustomers[index].pos;
+            this.waitingCustomers[index].travel([
+                vec2(12.5, leavingPos.y),
+                vec2(12.5, 0)
+            ]);
+            const length = this.leavingCustomers.length - 1;
+            this.leavingCustomers[length].setIndex(length);
             this.waitingCustomers?.splice(index, 1);
             cafe.book?.removeTask(index);
             for (let i = index; i < this.waitingCustomers.length; i++) {
@@ -89,6 +112,9 @@ class CustomerManager {
             this.numOrderingCustomers, 
             (index, state) => {
                 this.onCustomerLeave(index, state);
+            },
+            (index) => {
+                this.onCustomerExit(index);
             }
         );
         this.numOrderingCustomers++; 
@@ -105,6 +131,9 @@ class CustomerManager {
         for (const customer of this.waitingCustomers) {
             customer.update();
         }
+        for (const customer of this.leavingCustomers) {
+            customer.update();
+        }
     }
     render() {
 
@@ -114,6 +143,9 @@ class CustomerManager {
             customer.renderPost();
         }
         for (const customer of this.waitingCustomers) {
+            customer.renderPost();
+        }
+        for (const customer of this.leavingCustomers) {
             customer.renderPost();
         }
     }

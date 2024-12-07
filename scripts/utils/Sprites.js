@@ -97,6 +97,11 @@ const Emoticons = [
         vec2(16, 16),
         13
     ),
+    new TileInfo(
+        vec2(32, 32),
+        vec2(16, 16),
+        13
+    )
 ]
 
 const CafeTileMap = new TileInfo(vec2(), TILE_SIZE, 2);

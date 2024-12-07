@@ -7,19 +7,21 @@ const CustomerMoods = {
     ANNOYED:   { state: "annoyed", index: 1 },
     IMPATIENT: { state: "impatient", index: 2 },
     WAITING:   { state: "waiting", index: 3 },
-    NONE:      { state: "none", index: -1 }
+    FRUSTRATED: { state: "frustrated", index: 4},
+    NONE:      { state: "none", index: -1 },
 };
 class Customer {
-    constructor(pos, index, onLeaveCallback) {
+    constructor(pos, index, onLeaveCallback, onExitCallback) {
         this.mood = CustomerMoods.NONE;
         this.pos = pos;
         this.travelTime = 0;
         this.currentDestination = this.pos;
         this.moveSpeed = 0.02;
         this.targetDestination = [];
-        this.patience = 15;
+        this.patience = 3;
         this.timer = new Timer(this.patience / 3);
         this.onLeaveCallback = onLeaveCallback;
+        this.onExitCallback = onExitCallback;
         this.index = index;
         this.state = false; // True: Waiting in line, False: Ordering
         this.order = this.generateOrder();
@@ -99,11 +101,13 @@ class Customer {
                 break;
             case "impatient":
                 this.onLeaveCallback(this.index, this.state);
-                this.mood = CustomerMoods.NONE;
+                this.mood = CustomerMoods.FRUSTRATED;
                 break;
             case "none":
                 this.mood = CustomerMoods.HAPPY;
                 break;
+            case "frustrated":
+                return;
         }
         this.timer.set(this.patience / 3)
     }
@@ -147,6 +151,9 @@ class Customer {
                 this.travelTime = 0;    
             }
         } else {
+            if (this.mood === CustomerMoods.FRUSTRATED) {
+                this.onExitCallback(this.index);
+            }
             this.animator.setState("back")
         }
         
