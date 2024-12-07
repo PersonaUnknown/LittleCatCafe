@@ -49,7 +49,6 @@ class Customer {
                 this.mood = CustomerMoods.IMPATIENT;
                 break;
             case "impatient":
-                console.log(this.state);
                 this.onLeaveCallback(this.index, this.state);
                 this.mood = CustomerMoods.NONE;
                 break;

@@ -41,14 +41,16 @@ class CustomerManager {
     }
     onCustomerOrderCheck() {
         const item = sceneManager.player.item;
+        console.log(item);
         for (let i = 0; i < this.waitingCustomers.length; i++) {
             const customer = this.waitingCustomers[i];
             const order = ITEMS[customer.order];
+            console.log(order);
             if (order === item) {
                 // Remove that customer and then have that customer leave
                 sceneManager.player.setItem(null);
                 this.onScoreIncreaseCallback(1);
-                this.onCustomerLeave(i);
+                this.onCustomerLeave(i, true);
                 break;
             }
         }
