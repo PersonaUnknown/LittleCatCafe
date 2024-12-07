@@ -1,35 +1,44 @@
-<!DOCTYPE html><head>
-<title>Little JS Hello World Demo</title>
-</head><body>
-
-<!-- LittleJS -->
-<script src=./dist/littlejs.js></script>
-<!-- Utils -->
-<script src="./scripts/utils/Utils.js"></script>
-<script src="./scripts/utils/Config.js"></script>
-<script src="./scripts/utils/Animator.js"></script>
-<script src="./scripts/utils/Sprites.js"></script>
-<script src="./scripts/utils/SceneManager.js"></script>
-<script src="./scripts/utils/CustomerManager.js"></script>
-<!-- Scripts -->
-<script src="./scripts/components/FoodContainer.js"></script>
-<script src="./scripts/components/Menu.js"></script>
-<script src="./scripts/components/Inventory.js"></script>
-<script src="./scripts/components/Book.js"></script>
-<script src="./scripts/components/Meter.js"></script>
-<script src="./scripts/components/Tile.js"></script>
-<script src="./scripts/components/Label.js"></script>
-<script src="./scripts/components/Button.js"></script>
-<script src="./scripts/components/Interactable.js"></script>
-<script src="./scripts/components/Minigames.js"></script>
-<script src="./scripts/levels/CafeLevel.js"></script>
-<script src="./scripts/levels/LevelLoader.js"></script>
-<script src="./scripts/entity/Player.js"></script>
-<script src="./scripts/entity/Customer.js"></script>
-<!-- Scenes -->
-<script src="./scenes/Scene.js"></script>
-<script src="./scenes/TitleScreen.js"></script>
-<script src="./scenes/Cafe.js"></script>
-<script src="./scenes/Credits.js"></script>
-<!-- Main Game -->
-<script src=game.js></script>
+<!DOCTYPE html>
+<head>
+    <title>Little Cat Cafe</title>
+</head>
+<body>
+    <!-- Fonts -->
+    <style type="text/css">
+        @font-face {
+            font-family: "kitty";
+            src: url('fonts/Life\ Kittie.otf');
+        }
+    </style>
+    <!-- LittleJS -->
+    <script src=./dist/littlejs.js></script>
+    <!-- Utils -->
+    <script src="./scripts/utils/Utils.js"></script>
+    <script src="./scripts/utils/Config.js"></script>
+    <script src="./scripts/utils/Animator.js"></script>
+    <script src="./scripts/utils/Sprites.js"></script>
+    <script src="./scripts/utils/SceneManager.js"></script>
+    <script src="./scripts/utils/CustomerManager.js"></script>
+    <!-- Scripts -->
+    <script src="./scripts/components/FoodContainer.js"></script>
+    <script src="./scripts/components/Menu.js"></script>
+    <script src="./scripts/components/Inventory.js"></script>
+    <script src="./scripts/components/Book.js"></script>
+    <script src="./scripts/components/Meter.js"></script>
+    <script src="./scripts/components/Tile.js"></script>
+    <script src="./scripts/components/Label.js"></script>
+    <script src="./scripts/components/Button.js"></script>
+    <script src="./scripts/components/Interactable.js"></script>
+    <script src="./scripts/components/Minigames.js"></script>
+    <script src="./scripts/levels/CafeLevel.js"></script>
+    <script src="./scripts/levels/LevelLoader.js"></script>
+    <script src="./scripts/entity/Player.js"></script>
+    <script src="./scripts/entity/Customer.js"></script>
+    <!-- Scenes -->
+    <script src="./scenes/Scene.js"></script>
+    <script src="./scenes/TitleScreen.js"></script>
+    <script src="./scenes/Cafe.js"></script>
+    <script src="./scenes/Credits.js"></script>
+    <!-- Main Game -->
+    <script src=game.js></script>
+</body>

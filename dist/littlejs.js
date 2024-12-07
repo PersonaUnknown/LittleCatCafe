@@ -1270,7 +1270,7 @@ let canvasPixelated = true;
  *  @type {String}
  *  @default
  *  @memberof Settings */
-let fontDefault = 'arial';
+let fontDefault = 'kitty';
 
 /** Enable to show the LittleJS splash screen be shown on startup
  *  @type {Boolean}
