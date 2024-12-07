@@ -54,6 +54,12 @@ class Credits extends Scene {
                 asses: [
                     "Pixel Art Food Pack"
                 ]
+            },
+            {
+                creator: "katame13",
+                asses: [
+                    "CoffeeTools-16bit"
+                ]
             }
         ]
         const backgrounds = [

@@ -8,10 +8,11 @@ class CustomerManager {
         this.updateRate = 5;   
         this.timer = new Timer(this.updateRate);
         this.maxCustomers = 6;
+        this.onScoreIncreaseCallback = null;
     }
     onCustomerOrder() {
         // Take customer's order and adjust queue position of remaining customers
-        if (this.numOrderingCustomers <= 0) {
+        if (this.numOrderingCustomers <= 0 || this.orderingCustomers[0].pos.distance(vec2(8.5, 6.75)) > 0.1) {
             return;
         }
         this.orderingCustomers[0].takeOrder();
@@ -35,14 +36,16 @@ class CustomerManager {
             customer.travel([vec2(8.5, 6.75 - i)]);
             customer.setIndex(i);
         }
-        
     }
     onCustomerOrderCheck() {
         const item = sceneManager.player.item;
         for (let i = 0; i < this.waitingCustomers.length; i++) {
             const customer = this.waitingCustomers[i];
-            if (customer.order === item) {
+            const order = ITEMS[customer.order];
+            if (order === item) {
                 // Remove that customer and then have that customer leave
+                sceneManager.player.setItem(null);
+                this.onScoreIncreaseCallback(1);
                 this.onCustomerLeave(i, true);
                 break;
             }
