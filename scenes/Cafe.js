@@ -14,7 +14,15 @@ class Cafe extends Scene {
             new FoodContainer(
                 [
                     [FoodSprites[ITEMS.bread], ITEMS.bread],
-                    [FoodSprites[ITEMS.donut], ITEMS.donut]
+                    [FoodSprites[ITEMS.egg], ITEMS.egg],
+                    [FoodSprites[ITEMS.cheese], ITEMS.cheese],
+                    [FoodSprites[ITEMS.lettuce], ITEMS.lettuce],
+                    [FoodSprites[ITEMS.tomato], ITEMS.tomato],
+                    [FoodSprites[ITEMS.ham], ITEMS.ham],
+                    [FoodSprites[ITEMS.jelly], ITEMS.jelly],
+                    [FoodSprites[ITEMS.peanut_butter], ITEMS.peanut_butter],
+                    [FoodSprites[ITEMS.raw_bacon], ITEMS.raw_bacon],
+                    [FoodSprites[ITEMS.raw_egg], ITEMS.raw_egg],
                 ]
             ),
             new FoodContainer(
@@ -64,7 +72,9 @@ class Cafe extends Scene {
                 "Coffee station",
                 true
             ),
-            new Interactable(vec2(7, 14), vec2(1), () => sceneManager.player.setItem(ITEMS.coffee), "Coffee machine", true)
+            new Interactable(vec2(7, 14), vec2(1), (item) => {minigameManager.coffee_machine.interact(item)}, "Coffee machine", true),
+            new Interactable(vec2(8, 14), vec2(1), (item) => {minigameManager.stove_left.interact(item)}, "Stove", true),
+            new Interactable(vec2(9, 14), vec2(1), (item) => {minigameManager.stove_right.interact(item)}, "Stove", true),
         ]
         const initObjects = [customerManager, ...components, ...interactables, ...containers, ...Object.values(minigameManager)];
         super(1, initObjects);

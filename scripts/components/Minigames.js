@@ -21,11 +21,16 @@ function initMinigames() {
                 this.done = false;
                 this.input = null;
             }
-            else if (!this.done && item in this.recipes) {
+            else if (!this.done && (item in this.recipes || ITEMS.any in this.recipes)) {
                 this.active = true;
                 this.timer.set(this.delay);
-                sceneManager.player.setItem(null);
-                this.input = item;
+                if (item in this.recipes) {
+                    sceneManager.player.setItem(null);
+                    this.input = item;
+                }
+                else {
+                    this.input = ITEMS.any;
+                }
             }
         }
 
@@ -53,5 +58,22 @@ function initMinigames() {
 
     return {
         toaster : new TimerMinigame(vec2(14.5, 16), 5, { [ITEMS.bread] : ITEMS.cheese }),
+        coffee_machine : new TimerMinigame(vec2(7.5, 16), 5, { [ITEMS.any] : ITEMS.coffee }),
+        stove_left : new TimerMinigame(
+            vec2(8.5, 16),
+            5,
+            { 
+                [ITEMS.raw_bacon] : ITEMS.bacon,
+                [ITEMS.raw_egg] : ITEMS.egg,
+            }
+        ),
+        stove_right : new TimerMinigame(
+            vec2(9.5, 16),
+            5,
+            { 
+                [ITEMS.raw_bacon] : ITEMS.bacon,
+                [ITEMS.raw_egg] : ITEMS.egg,
+            }
+        ),
     }
 }
