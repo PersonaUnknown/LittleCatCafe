@@ -120,7 +120,6 @@ class Customer {
     }
     takeOrder() {
         cafe.book.appendTask(this.order);
-        this.moveSpeed = 0.3;
         this.timer.set(this.patience / 3);
     }
     update() {
@@ -142,8 +141,8 @@ class Customer {
             }
             this.travelTime += timeDelta;
             const distance = this.currentDestination.distance(this.targetDestination[0]);
-            this.pos.x = lerp(this.travelTime * this.moveSpeed / distance, this.currentDestination.x, this.targetDestination[0].x);
-            this.pos.y = lerp(this.travelTime * this.moveSpeed / distance, this.currentDestination.y, this.targetDestination[0].y);
+            this.pos.x = lerp(this.travelTime / distance * this.moveSpeed, this.currentDestination.x, this.targetDestination[0].x);
+            this.pos.y = lerp(this.travelTime / distance * this.moveSpeed, this.currentDestination.y, this.targetDestination[0].y);
             if (this.pos.distance(this.targetDestination[0]) <= 0.01) {
                 this.pos = this.targetDestination[0];
                 this.currentDestination = this.pos;
