@@ -1,7 +1,8 @@
 class Scene {
-    constructor(index, initObjects) {
+    constructor(index, initObjects, track=null) {
         this.index = index;
         this.objects = initObjects;
+        this.track = track;
     }
     addObject(object) {
         this.objects.push(object);

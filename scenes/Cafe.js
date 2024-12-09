@@ -6,7 +6,7 @@ class Cafe extends Scene {
         const components = [
             new Inventory(),
             new Menu(
-                vec2(-6, 14.5),
+                vec2(-6, 13),
                 vec2(11.5, 11.5)
             )
         ];

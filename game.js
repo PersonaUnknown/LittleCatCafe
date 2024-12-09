@@ -1,6 +1,6 @@
 let sceneManager;
 let cafe;
-let book;
+let currentTrack;
 function gameInit()
 {
     // called once after the engine starts up
@@ -19,6 +19,7 @@ function gameInit()
         new CoffeeScene(),
     ]
     sceneManager.scenes = buildScenes;
+    // playAudioFile("/audio/cafe-music.mp3", 1, true);
 }
 
 function gameUpdate()

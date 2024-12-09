@@ -48,6 +48,7 @@ class CustomerManager {
             if (order === item) {
                 // Remove that customer and then have that customer leave
                 sceneManager.player.setItem(null);
+                correct.play();
                 this.onScoreIncreaseCallback(1);
                 this.onCustomerLeave(i, true);
                 break;
@@ -120,6 +121,7 @@ class CustomerManager {
         this.numOrderingCustomers++; 
         newCustomer.travel([vec2(8.5, yOffset)]);
         this.orderingCustomers.push(newCustomer);
+        coin.play();
     }
     update() {
         if (this.timer.elapsed()) {

@@ -63,7 +63,28 @@ class Credits extends Scene {
             },
             {
                 creator: "Syafrizal a.k.a. Khurasan",
-                assets: "Life Kittie Font"
+                assets: [
+                    "Life Kittie Font"
+                ]
+            },
+            {
+                creator: "별 헤는 다락방 Starry Attic",
+                assets: [
+                    "✨Daystar - ☕Hot chocolate🍫✨(Royalty Free Music)"
+                ]
+            },
+            {
+                creator: "MUSIC FOR VIDEO LIBRARY",
+                assets: [
+                    "203. Cooking Show Background Music [Food, Funk]"
+                ]
+            },
+            {
+                creator: "https://taira-komori.jpn.org/",
+                assets: [
+                    "coin01",
+                    "correct_answer3",
+                ]
             }
         ]
         const backgrounds = [

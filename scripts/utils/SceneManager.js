@@ -43,6 +43,15 @@ class SceneManager {
             this.player = null;
             this.index = sceneId;
             this.scenes[this.index].init();
+            switch (scene) {
+                case "Title":
+                    // currentTrack = titleMusic;
+                    // currentTrack.play();
+                    break;
+                case "Cafe":
+                    playAudioFile("/audio/cafe_music.mp3", 1, true);
+                    break;
+            }
         }
     }
     setPlayer(player) {

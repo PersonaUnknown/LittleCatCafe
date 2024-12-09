@@ -63,7 +63,7 @@ const NotebookSecondPage = new TileInfo(
 )
 const CafeMenu = new TileInfo(
     vec2(0, 0),
-    vec2(100, 100),
+    vec2(125, 110),
     10
 )
 const RightArrow = new TileInfo(
