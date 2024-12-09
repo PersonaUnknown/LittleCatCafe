@@ -14,7 +14,6 @@ class Cafe extends Scene {
             new FoodContainer(
                 [
                     [FoodSprites[ITEMS.bread], ITEMS.bread],
-                    [FoodSprites[ITEMS.egg], ITEMS.egg],
                     [FoodSprites[ITEMS.cheese], ITEMS.cheese],
                     [FoodSprites[ITEMS.lettuce], ITEMS.lettuce],
                     [FoodSprites[ITEMS.tomato], ITEMS.tomato],

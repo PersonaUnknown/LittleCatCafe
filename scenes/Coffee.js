@@ -1,10 +1,22 @@
 class CoffeeScene extends Scene {
     constructor() {
         const draggables = [
-            new Draggable(vec2(14, 14), vec2(4), FoodSprites[ITEMS.egg], ITEMS.egg),
-            new Draggable(vec2(14, 9), vec2(4), FoodSprites[ITEMS.jelly], ITEMS.jelly),
+            new Draggable(vec2(4, 14), vec2(4), FoodSprites[ITEMS.water], ITEMS.water),
+            new Draggable(vec2(9, 14), vec2(4), FoodSprites[ITEMS.milk], ITEMS.milk),
+            new Draggable(vec2(14, 14), vec2(4), FoodSprites[ITEMS.chocolate], ITEMS.chocolate),
         ]
-        const receiver = new DragReceiver(vec2(9, 9), vec2(4), FoodSprites[ITEMS.coffee], draggables, (data) => {this.ingredients.add(data)});
+        const receiver = new DragReceiver(
+            vec2(9, 9),
+            vec2(4),
+            FoodSprites[ITEMS.coffee],
+            draggables,
+            (data) => {
+                this.ingredients.add(data);
+                if (data === ITEMS.water) this.ingredientsString += "Water\n";
+                else if (data === ITEMS.milk) this.ingredientsString += "Milk\n";
+                else if (data === ITEMS.chocolate) this.ingredientsString += "Chocolate\n";
+            }
+        )
         const exit_button = new Button(
             new Label(
                 "Done",
@@ -18,6 +30,7 @@ class CoffeeScene extends Scene {
                 sceneManager.switchScene("Cafe");
                 sceneManager.player.setItem(this.checkRecipe(this.ingredients));
                 this.ingredients.clear();
+                this.ingredientsString = "Added:\n";
             },
             rgb(),
             rgb(0, 1, 1)
@@ -28,12 +41,21 @@ class CoffeeScene extends Scene {
 
         this.recipes = [
             {
-                in : new Set([ITEMS.egg, ITEMS.jelly]),
-                out : ITEMS.lettuce,
+                in : new Set([ITEMS.water]),
+                out : ITEMS.americano,
+            },
+            {
+                in : new Set([ITEMS.milk]),
+                out : ITEMS.latte,
+            },
+            {
+                in : new Set([ITEMS.milk, ITEMS.chocolate]),
+                out : ITEMS.mocha,
             },
         ]
 
         this.ingredients = new Set();
+        this.ingredientsString = "Added:\n";
     }
 
     checkRecipe(input) {
@@ -56,16 +78,9 @@ class CoffeeScene extends Scene {
         return null;
     }
 
-    ingredientsToString() {
-        let t = "Added:\n";
-        if (this.ingredients.has(ITEMS.egg)) t += "Egg\n";
-        if (this.ingredients.has(ITEMS.jelly)) t += "Jelly\n";
-        return t;
-    }
-
     render() {
         drawRect(vec2(8, 8), vec2(64), rgb(250 / 255, 235 / 255, 215 / 255));
-        drawText(this.ingredientsToString(), vec2(0, 8), 1, rgb(0, 0, 0));
+        drawText(this.ingredientsString, vec2(0, 8), 1, rgb(0, 0, 0));
         super.render();
     }
 }
