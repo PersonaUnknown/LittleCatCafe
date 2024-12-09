@@ -68,12 +68,6 @@ class Credits extends Scene {
                 ]
             },
             {
-                creator: "별 헤는 다락방 Starry Attic",
-                assets: [
-                    "✨Daystar - ☕Hot chocolate🍫✨(Royalty Free Music)"
-                ]
-            },
-            {
                 creator: "MUSIC FOR VIDEO LIBRARY",
                 assets: [
                     "203. Cooking Show Background Music [Food, Funk]"

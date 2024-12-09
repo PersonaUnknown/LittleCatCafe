@@ -121,7 +121,6 @@ class Cafe extends Scene {
         }
         setCameraPos(vec2(8));
 
-        // TODO move this to constructor
         this.book = new Book();
         this.book.appendRecipe("Toast", "");
         this.addObject(this.book);
