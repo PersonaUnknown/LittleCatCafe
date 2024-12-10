@@ -44,10 +44,15 @@ class Button {
         // Background
         drawRect(
             this.pos,
-            this.size,
+            vec2(this.size.x * 0.95, this.size.y * 0.95),
             this.isMouseOver || (this.isToggleButton && this.isToggled) ? 
                 this.hoverBackgroundColor : 
                 this.backgroundColor
+        )
+        drawTile(
+            this.pos,
+            this.size,
+            OutlineRectangle
         )
         // Text Label
         this.label.renderPost();
