@@ -9,10 +9,11 @@ class Menu {
     }
 
     render() {
-
+                
     }
 
     renderPost() {
+        // Draw menu
         drawTile(
             this.pos,
             this.size,

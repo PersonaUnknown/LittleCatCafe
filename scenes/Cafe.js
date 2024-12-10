@@ -3,12 +3,14 @@ class Cafe extends Scene {
     constructor() {
         const minigameManager = initMinigames();
         const customerManager = new CustomerManager();
+        const score = new Score();
         const components = [
             new Inventory(),
             new Menu(
-                vec2(-6, 14.5),
+                vec2(-6, 13),
                 vec2(11.5, 11.5)
-            )
+            ),
+            score
         ];
         const containers = [
             new FoodContainer(
@@ -83,11 +85,11 @@ class Cafe extends Scene {
         this.customerManager = customerManager;
         this.inventory = components[0];
         this.playerPos = vec2(10, 13);
-        this.score = 0;
+        this.score = score;
     }
 
     addScore(value) {
-        this.score += value;
+        this.score.addScore(value);
     }
 
     init() {
@@ -128,7 +130,6 @@ class Cafe extends Scene {
         }
         setCameraPos(vec2(8));
 
-        // TODO move this to constructor
         this.book = new Book();
         this.book.appendRecipe("Toast", "");
         this.addObject(this.book);

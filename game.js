@@ -1,6 +1,6 @@
 let sceneManager;
 let cafe;
-let book;
+let currentTrack;
 function gameInit()
 {
     // called once after the engine starts up
@@ -17,6 +17,7 @@ function gameInit()
         new TitleScreen(sceneManager),
         cafe,
         new CoffeeScene(),
+        new Credits()
     ]
     sceneManager.scenes = buildScenes;
 }
