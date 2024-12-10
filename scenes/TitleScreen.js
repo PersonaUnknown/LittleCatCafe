@@ -40,7 +40,9 @@ class TitleScreen extends Scene {
                 ),
                 vec2(0, -5), 
                 vec2(16, 3),
-                () => {},
+                () => {
+                    sceneManager.switchScene("Credits");
+                },
                 rgb(1, 1, 1, 1),
                 rgb(0, 1, 1, 1)
             )

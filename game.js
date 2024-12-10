@@ -17,9 +17,9 @@ function gameInit()
         new TitleScreen(sceneManager),
         cafe,
         new CoffeeScene(),
+        new Credits()
     ]
     sceneManager.scenes = buildScenes;
-    // playAudioFile("/audio/cafe-music.mp3", 1, true);
 }
 
 function gameUpdate()
