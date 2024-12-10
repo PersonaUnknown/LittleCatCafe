@@ -6,8 +6,8 @@ class CustomerManager {
         this.leavingCustomers = [];
         this.numOrderingCustomers = 0;
         this.numWaitingCustomers = 0;
-        this.updateRate = 5;   
-        this.timer = new Timer(this.updateRate);
+        this.updateRate = 20;   
+        this.timer = new Timer(5);
         this.maxCustomers = 6;
         this.onScoreIncreaseCallback = null;
     }
@@ -49,7 +49,10 @@ class CustomerManager {
                 // Remove that customer and then have that customer leave
                 sceneManager.player.setItem(null);
                 correct.play();
-                this.onScoreIncreaseCallback(1);
+                customer.mood = CustomerMoods.SATISFIED;
+                const patienceFactor = clamp(1 - customer.timeWaited / customer.patience); 
+                const score = Math.round(100 * patienceFactor);
+                this.onScoreIncreaseCallback(score);
                 this.onCustomerLeave(i, true);
                 break;
             }

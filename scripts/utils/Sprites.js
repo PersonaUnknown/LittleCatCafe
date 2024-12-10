@@ -102,6 +102,11 @@ const Emoticons = [
         vec2(32, 32),
         vec2(16, 16),
         13
+    ),
+    new TileInfo(
+        vec2(80, 0),
+        vec2(16, 16),
+        13
     )
 ]
 const OutlineRectangle = new TileInfo(

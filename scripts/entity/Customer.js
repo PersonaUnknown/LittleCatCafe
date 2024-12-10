@@ -8,6 +8,7 @@ const CustomerMoods = {
     IMPATIENT: { state: "impatient", index: 2 },
     WAITING:   { state: "waiting", index: 3 },
     FRUSTRATED: { state: "frustrated", index: 4},
+    SATISFIED: { state: "satisfied", index: 5},
     NONE:      { state: "none", index: -1 },
 };
 class Customer {
@@ -18,13 +19,14 @@ class Customer {
         this.currentDestination = this.pos;
         this.moveSpeed = 0.02;
         this.targetDestination = [];
-        this.patience = 3;
+        this.patience = 15;
         this.timer = new Timer(this.patience / 3);
         this.onLeaveCallback = onLeaveCallback;
         this.onExitCallback = onExitCallback;
         this.index = index;
         this.state = false; // True: Waiting in line, False: Ordering
         this.order = this.generateOrder();
+        this.timeWaited = 0;
         
         // Determine animation
         const rng = Math.random();
@@ -123,6 +125,9 @@ class Customer {
         this.timer.set(this.patience / 3);
     }
     update() {
+        if (this.state && this.mood === CustomerMoods.WAITING && this.mood === CustomerMoods.ANNOYED && this.mood === CustomerMoods.IMPATIENT) {
+            this.timeWaited += timeDelta;
+        }
         if (this.timer.elapsed()) {
             this.emote();
         }
@@ -150,7 +155,7 @@ class Customer {
                 this.travelTime = 0;    
             }
         } else {
-            if (this.mood === CustomerMoods.FRUSTRATED) {
+            if (this.mood === CustomerMoods.FRUSTRATED || this.mood === CustomerMoods.SATISFIED) {
                 this.onExitCallback(this.index);
             }
             this.animator.setState("back")
