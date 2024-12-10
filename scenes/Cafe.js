@@ -24,12 +24,18 @@ class Cafe extends Scene {
                     [FoodSprites[ITEMS.peanut_butter], ITEMS.peanut_butter],
                     [FoodSprites[ITEMS.raw_bacon], ITEMS.raw_bacon],
                     [FoodSprites[ITEMS.raw_egg], ITEMS.raw_egg],
+                    [FoodSprites[ITEMS.raw_burrito], ITEMS.raw_burrito],
+                    [FoodSprites[ITEMS.ramen_raw], ITEMS.ramen_raw],
                 ]
             ),
             new FoodContainer(
                 [
                     [FoodSprites[ITEMS.muffin], ITEMS.muffin],
-                    [FoodSprites[ITEMS.donut], ITEMS.donut]
+                    [FoodSprites[ITEMS.donut], ITEMS.donut],
+                    [FoodSprites[ITEMS.cookie], ITEMS.cookie],
+                    [FoodSprites[ITEMS.croissant], ITEMS.croissant],
+                    [FoodSprites[ITEMS.danish], ITEMS.danish],
+                    [FoodSprites[ITEMS.cake], ITEMS.cake],
                 ]
             )
         ]
@@ -41,7 +47,6 @@ class Cafe extends Scene {
                 "Fridge", 
                 true
             ),
-            new Interactable(vec2(14, 14), vec2(1), minigameManager.toaster.interact.bind(minigameManager.toaster), "Toaster", true),
             new Interactable(
                 vec2(8, 9),
                 vec2(1),
@@ -73,6 +78,7 @@ class Cafe extends Scene {
                 "Coffee station",
                 true
             ),
+            new Interactable(vec2(14, 14), vec2(1), (item) => {minigameManager.toaster.interact(item)}, "Toaster", true),
             new Interactable(vec2(7, 14), vec2(1), (item) => {minigameManager.coffee_machine.interact(item)}, "Coffee machine", true),
             new Interactable(vec2(8, 14), vec2(1), (item) => {minigameManager.stove_left.interact(item)}, "Stove", true),
             new Interactable(vec2(9, 14), vec2(1), (item) => {minigameManager.stove_right.interact(item)}, "Stove", true),
