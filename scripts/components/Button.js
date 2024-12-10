@@ -6,7 +6,8 @@ class Button {
         onPress, 
         backgroundColor, 
         hoverBackgroundColor,
-        isToggleButton = false
+        isToggleButton = false,
+        useBorder = false
     ) {
         // Params
         this.label = label;
@@ -20,6 +21,7 @@ class Button {
         this.isMouseOver = false;
         this.isToggleButton = isToggleButton;
         this.isToggled = false;
+        this.useBorder = useBorder;
     }
     toggleOn() {
         if (this.isToggleButton) {
@@ -49,11 +51,13 @@ class Button {
                 this.hoverBackgroundColor : 
                 this.backgroundColor
         )
-        drawTile(
-            this.pos,
-            this.size,
-            OutlineRectangle
-        )
+        if (this.useBorder) {
+            drawTile(
+                this.pos,
+                this.size,
+                OutlineRectangle
+            )
+        }
         // Text Label
         this.label.renderPost();
         // Image Icon
