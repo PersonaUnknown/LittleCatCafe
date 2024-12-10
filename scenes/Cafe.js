@@ -92,6 +92,11 @@ class Cafe extends Scene {
         this.inventory = components[0];
         this.playerPos = vec2(10, 13);
         this.score = score;
+
+        this.book = new Book();
+        this.book.appendRecipe("Toast", "");
+        this.addObject(this.book);
+        this.customerManager.onScoreIncreaseCallback = (value) => { this.addScore(value); }
     }
 
     addScore(value) {
@@ -135,11 +140,6 @@ class Cafe extends Scene {
             currLayer.redraw();
         }
         setCameraPos(vec2(8));
-
-        this.book = new Book();
-        this.book.appendRecipe("Toast", "");
-        this.addObject(this.book);
-        this.customerManager.onScoreIncreaseCallback = (value) => { this.addScore(value); }
     }
 
     destroy () {
