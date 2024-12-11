@@ -114,10 +114,10 @@ class CustomerManager {
         }
     }
     spawnCustomer() {
-        // TODO: Add functionality to decrease the timer slowly until it's like every 2 seconds or so
         const x = this.elapsedTime / 60;
         const difficultyFactor = 3 + 0.5 * x + Math.sin(2 * x);
         const newUpdateRate =  10 / (0.3 * difficultyFactor);
+        console.log(newUpdateRate);
         this.timer.set(newUpdateRate);
         const length = this.numOrderingCustomers;
         if (length >= this.maxCustomers) {
