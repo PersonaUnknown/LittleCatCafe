@@ -1,6 +1,5 @@
 class Player extends EngineObject {
-    constructor(pos, size, animator, speed, interactables, inventory)
-    {
+    constructor(pos, size, animator, speed, interactables, inventory) {
         super(pos, size, animator.getFrame(), 0, undefined, 0);
         this.animator = animator;
         this.speed = speed;
@@ -8,6 +7,7 @@ class Player extends EngineObject {
         this.inventory = inventory;
         this.collideTiles = true;
         this.item = null;
+        this.isBusy = false;
     }
 
     setItem(item) {
@@ -19,8 +19,20 @@ class Player extends EngineObject {
         this.inventory.updateItem(FoodSprites[item]);
     }
 
+    onBusyAction() {
+        this.isBusy = true;
+    }
+
+    onBusyEnd() {
+        this.isBusy = false;
+    }
+
     update()
     {
+        if (this.isBusy) {
+            return;
+        }
+
         if (keyIsDown("KeyW")) {
             this.velocity.x = 0;
             this.velocity.y = (this.speed * timeDelta);

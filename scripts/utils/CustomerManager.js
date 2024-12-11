@@ -55,7 +55,7 @@ class CustomerManager {
                 const patienceFactor = clamp(1 - customer.timeWaited / customer.patience); 
                 const score = Math.round(100 * patienceFactor);
                 this.onScoreIncreaseCallback(score);
-                this.onCustomerLeave(i, true);
+                this.onCustomerLeave(i, true, true);
                 this.numSatisfiedCustomers++;
                 break;
             }
@@ -68,7 +68,7 @@ class CustomerManager {
             this.leavingCustomers[i].decrementIndex();
         }
     }
-    onCustomerLeave(index, state=false) {
+    onCustomerLeave(index, state=false, satisfied=false) {
         // Move all the customers below the customer up one tile
         if (!state && this.numOrderingCustomers > 0) {
             this.leavingCustomers.push(this.orderingCustomers[index]);
@@ -86,6 +86,9 @@ class CustomerManager {
             }
     
             this.numOrderingCustomers--;
+
+            // Decrease life count
+            cafe.lifeManager.onScoreDecrease();
         } 
         if (state && this.numWaitingCustomers > 0) {
             this.leavingCustomers.push(this.waitingCustomers[index]);
@@ -104,6 +107,10 @@ class CustomerManager {
             }
     
             this.numWaitingCustomers--;
+
+            if (!satisfied) {
+                cafe.lifeManager.onScoreDecrease();
+            }
         }
     }
     spawnCustomer() {
