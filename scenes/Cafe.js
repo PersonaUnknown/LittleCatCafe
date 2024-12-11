@@ -3,6 +3,7 @@ class Cafe extends Scene {
     constructor() {
         const minigameManager = initMinigames();
         const customerManager = new CustomerManager();
+        const lifeManager = new LifeManager();
         const score = new Score();
         const components = [
             new Inventory(),
@@ -10,7 +11,8 @@ class Cafe extends Scene {
                 vec2(-6, 13),
                 vec2(11.5, 11.5)
             ),
-            score
+            score,
+            lifeManager
         ];
         const containers = [
             new FoodContainer(
@@ -94,7 +96,7 @@ class Cafe extends Scene {
         this.inventory = components[0];
         this.playerPos = vec2(10, 13);
         this.score = score;
-
+        this.lifeManager = lifeManager;
         this.book = new Book();
         this.book.appendRecipe("Toast", "");
         this.addObject(this.book);
@@ -123,7 +125,6 @@ class Cafe extends Scene {
         for (let layerNum = 0; layerNum < CafeLevelData.layers.length; layerNum++) {
             const renderOrder = layerNum + (layerNum >= 2 ? 100 : -100);
             this.tileLayers.push(new TileLayer(vec2(0, 0), cafeSize, CafeTileMap, vec2(1), renderOrder));
-            console.log(CafeLevelData.layers[layerNum].name, renderOrder);
 
             const layer = CafeLevelData.layers[layerNum].data;
             const currLayer = this.tileLayers[layerNum];
