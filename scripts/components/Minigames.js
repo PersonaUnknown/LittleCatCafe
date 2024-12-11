@@ -57,7 +57,7 @@ function initMinigames() {
     }
 
     return {
-        toaster : new TimerMinigame(vec2(14.5, 16), 5, { [ITEMS.bread] : ITEMS.cheese }),
+        toaster : new TimerMinigame(vec2(14.5, 16), 5, { [ITEMS.bread] : ITEMS.toast }),
         coffee_machine : new TimerMinigame(vec2(7.5, 16), 5, { [ITEMS.any] : ITEMS.coffee }),
         stove_left : new TimerMinigame(
             vec2(8.5, 16),

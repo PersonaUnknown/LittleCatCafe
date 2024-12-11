@@ -12,9 +12,7 @@ class CoffeeScene extends Scene {
             draggables,
             (data) => {
                 this.ingredients.add(data);
-                if (data === ITEMS.water) this.ingredientsString += "Water\n";
-                else if (data === ITEMS.milk) this.ingredientsString += "Milk\n";
-                else if (data === ITEMS.chocolate) this.ingredientsString += "Chocolate\n";
+                this.ingredientsString += ITEM_NAMES[data] + "\n";
             }
         )
         const exit_button = new Button(
@@ -75,7 +73,7 @@ class CoffeeScene extends Scene {
                 return r.out;
             }
         }
-        return null;
+        return ITEMS.bad_coffee;
     }
 
     render() {
