@@ -6,10 +6,12 @@ class CustomerManager {
         this.leavingCustomers = [];
         this.numOrderingCustomers = 0;
         this.numWaitingCustomers = 0;
-        this.updateRate = 20;   
-        this.timer = new Timer(5);
+        this.updateRate = 10;   
+        this.timer = new Timer(2.5); // Initial customer spawns much faster
         this.maxCustomers = 6;
         this.onScoreIncreaseCallback = null;
+        this.elapsedTime = 0;
+        this.numSatisfiedCustomers = 0;
     }
     onCustomerOrder() {
         // Take customer's order and adjust queue position of remaining customers
@@ -54,6 +56,7 @@ class CustomerManager {
                 const score = Math.round(100 * patienceFactor);
                 this.onScoreIncreaseCallback(score);
                 this.onCustomerLeave(i, true);
+                this.numSatisfiedCustomers++;
                 break;
             }
         }
@@ -105,7 +108,10 @@ class CustomerManager {
     }
     spawnCustomer() {
         // TODO: Add functionality to decrease the timer slowly until it's like every 2 seconds or so
-        this.timer.set(this.updateRate);
+        const x = this.elapsedTime / 60;
+        const difficultyFactor = 3 + 0.5 * x + Math.sin(2 * x);
+        const newUpdateRate =  10 / (0.3 * difficultyFactor);
+        this.timer.set(newUpdateRate);
         const length = this.numOrderingCustomers;
         if (length >= this.maxCustomers) {
             return;
@@ -127,6 +133,7 @@ class CustomerManager {
         coin.play();
     }
     update() {
+        this.elapsedTime += timeDelta;
         if (this.timer.elapsed()) {
             this.spawnCustomer();
         }

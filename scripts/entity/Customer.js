@@ -125,7 +125,7 @@ class Customer {
         this.timer.set(this.patience / 3);
     }
     update() {
-        if (this.state && this.mood === CustomerMoods.WAITING && this.mood === CustomerMoods.ANNOYED && this.mood === CustomerMoods.IMPATIENT) {
+        if (this.state && (this.mood === CustomerMoods.WAITING || this.mood === CustomerMoods.ANNOYED || this.mood === CustomerMoods.IMPATIENT)) {
             this.timeWaited += timeDelta;
         }
         if (this.timer.elapsed()) {
