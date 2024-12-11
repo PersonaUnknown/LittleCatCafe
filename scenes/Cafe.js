@@ -142,6 +142,13 @@ class Cafe extends Scene {
             currLayer.redraw();
         }
         setCameraPos(vec2(8));
+
+        for (const i of Object.values(this.minigameManager)) {
+            if (i instanceof TimerMinigame) {
+                if (i.done) i.createParticles();
+                else if (i.activeParticles && i.active) i.createParticles(true);
+            }
+        }
     }
 
     destroy () {
@@ -152,5 +159,9 @@ class Cafe extends Scene {
             layer.destroy();
         }
         this.tileLayers = [];
+
+        for (const i of Object.values(this.minigameManager)) {
+            if (i instanceof TimerMinigame) i.destroyParticles();
+        }
     }
 }
