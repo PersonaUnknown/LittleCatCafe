@@ -17,7 +17,8 @@ function gameInit()
         new TitleScreen(sceneManager),
         cafe,
         new CoffeeScene(),
-        new Credits()
+        new Credits(),
+        new GameOver(sceneManager)
     ]
     sceneManager.scenes = buildScenes;
 }

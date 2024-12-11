@@ -25,7 +25,7 @@ class TitleScreen extends Scene {
                 vec2(0, 0), 
                 vec2(16, 3),
                 () => {
-                    playAudioFile("/audio/cafe_music.mp3", 1, true);
+                    currentTrack = playAudioFile("/audio/cafe_music.mp3", 1, true);
                     sceneManager.switchScene("Cafe");
                 },
                 rgb(1, 1, 1, 1),
