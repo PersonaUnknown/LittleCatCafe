@@ -29,7 +29,9 @@ class TitleScreen extends Scene {
                     sceneManager.switchScene("Cafe");
                 },
                 rgb(1, 1, 1, 1),
-                rgb(0, 1, 1, 1)
+                rgb(0, 1, 1, 1),
+                false,
+                true
             ),
             new Button(
                 new Label(
@@ -44,7 +46,9 @@ class TitleScreen extends Scene {
                     sceneManager.switchScene("Credits");
                 },
                 rgb(1, 1, 1, 1),
-                rgb(0, 1, 1, 1)
+                rgb(0, 1, 1, 1),
+                false,
+                true
             )
         ]
         const initObjects = [...backgrounds, ...components];

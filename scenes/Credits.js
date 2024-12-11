@@ -92,17 +92,19 @@ class Credits extends Scene {
             new Button(
                 new Label(
                     "<-",
-                    vec2(mainCanvasSize.x * 0.04, mainCanvasSize.y * 0.08),
-                    50,
+                    vec2(mainCanvasSize.x * 0.025, mainCanvasSize.y * 0.03),
+                    65,
                     rgb(0, 0, 0, 1)
                 ),
-                vec2(-19, 10),
-                vec2(1.5, 1.5),
+                vec2(-19, 10.15),
+                vec2(1.75, 1.5),
                 () => {
                     sceneManager.switchScene("Title");
                 },
                 rgb(1, 1, 1, 1),
-                rgb(0.5, 0.5, 0.5, 1)
+                rgb(0.5, 0.5, 0.5, 1),
+                false,
+                true
             )        
         ]
         const initObjects = [...backgrounds, ...components];
