@@ -82,6 +82,8 @@ class Cafe extends Scene {
             new Interactable(vec2(7, 14), vec2(1), (item) => {minigameManager.coffee_machine.interact(item)}, "Coffee machine", true),
             new Interactable(vec2(8, 14), vec2(1), (item) => {minigameManager.stove_left.interact(item)}, "Stove", true),
             new Interactable(vec2(9, 14), vec2(1), (item) => {minigameManager.stove_right.interact(item)}, "Stove", true),
+            new Interactable(vec2(12, 14), vec2(2, 1), (item) => {minigameManager.sink.interact(item)}, "Sink", true),
+            new Interactable(vec2(15, 14), vec2(1), (item) => {minigameManager.microwave.interact(item)}, "Microwave", true),
         ]
         const initObjects = [customerManager, ...components, ...interactables, ...containers, ...Object.values(minigameManager)];
         super(1, initObjects);

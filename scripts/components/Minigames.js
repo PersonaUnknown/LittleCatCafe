@@ -75,5 +75,14 @@ function initMinigames() {
                 [ITEMS.raw_egg] : ITEMS.egg,
             }
         ),
+        sink : new TimerMinigame(vec2(13, 16), 1, { [ITEMS.ramen_raw] : ITEMS.ramen_water }),
+        microwave : new TimerMinigame(
+            vec2(15.5, 16),
+            5,
+            {
+                [ITEMS.ramen_water] : ITEMS.ramen_cooked,
+                [ITEMS.raw_burrito] : ITEMS.burrito,
+            }
+        ),
     }
 }
