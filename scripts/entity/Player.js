@@ -16,7 +16,7 @@ class Player extends EngineObject {
             item = null;
         }
         this.item = item;
-        this.inventory.updateItem(FoodSprites[item]);
+        this.inventory.updateItem(item);
     }
 
     onBusyAction() {

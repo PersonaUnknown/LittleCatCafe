@@ -2,19 +2,20 @@ class Food {
     constructor(sprite, pos, index, container) {
         this.sprite = sprite;
         this.pos = pos;
-        this.name = name;
+        this.index = index;
+        this.size = vec2(2.5, 2.5);
         this.button = new IconButton(
             InputSquareSprite,
             this.pos,
-            vec2(2.5, 2.5),
+            this.size,
             new Label(
                 "",
-                new vec2(0, 0),
+                vec2(0, 0),
                 75,
                 rgb(0, 0, 0, 1)
             ),
             this.pos, 
-            vec2(2.5, 2.5),
+            this.size,
             () => { 
                 container.closeMenu();
                 sceneManager.player.setItem(index);
@@ -33,9 +34,13 @@ class Food {
         // // Draw the food icon
         drawTile(
             this.pos,
-            vec2(2.5, 2.5),
+            this.size,
             this.sprite
         )
+
+        if (isPointWithinBox(mousePos, this.pos, this.size)) {
+            drawText(ITEM_NAMES[this.index], mousePos.add(vec2(0.25, -0.5)), 1, rgb(0, 0, 0), undefined, undefined, "left");
+        }
     }
 }
 class FoodContainer {
