@@ -87,3 +87,24 @@ const ITEM_NAMES = [
     "PB & J",
     "Bad sandwich",
 ]
+
+const ITEMS_MENU = [
+    ITEMS.donut,
+    ITEMS.coffee,
+    ITEMS.muffin,
+    ITEMS.americano,
+    ITEMS.latte,
+    ITEMS.mocha,
+    ITEMS.burrito,
+    ITEMS.cookie,
+    ITEMS.croissant,
+    ITEMS.danish,
+    ITEMS.cake,
+    ITEMS.ramen_cooked,
+    ITEMS.sandwich_ham_cheese,
+    ITEMS.sandwich_blt,
+    ITEMS.sandwich_breakfast,
+    ITEMS.sandwich_cheese_cooked,
+    ITEMS.sandwich_christo_cooked,
+    ITEMS.sandwich_pbj,
+]
