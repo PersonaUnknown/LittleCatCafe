@@ -29,7 +29,21 @@ class CustomerManager {
             ]
         this.orderingCustomers[0].state = true;
         this.orderingCustomers[0].travel(travelPath);
-        this.orderingCustomers[0].mood = CustomerMoods.NONE;
+        const mood = this.orderingCustomers[0].mood;
+        switch (mood) {
+            case CustomerMoods.HAPPY:
+            case CustomerMoods.NONE:
+            case CustomerMoods.WAITING:
+                this.orderingCustomers[0].mood = CustomerMoods.NONE;
+                break;
+            case CustomerMoods.ANNOYED:
+                this.orderingCustomers[0].mood = CustomerMoods.HAPPY;
+                break;
+            case CustomerMoods.IMPATIENT:
+                this.orderingCustomers[0].mood = CustomerMoods.WAITING;
+                break;
+        }
+
         this.orderingCustomers[0].setIndex(this.numWaitingCustomers);
         this.waitingCustomers.push(this.orderingCustomers[0]);
         this.orderingCustomers.shift();
@@ -47,6 +61,8 @@ class CustomerManager {
         for (let i = 0; i < this.waitingCustomers.length; i++) {
             const customer = this.waitingCustomers[i];
             const order = customer.order;
+            console.log(order);
+            console.log(item);
             if (order === item) {
                 // Remove that customer and then have that customer leave
                 sceneManager.player.setItem(null);
