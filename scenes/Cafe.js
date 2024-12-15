@@ -94,6 +94,7 @@ class Cafe extends Scene {
         this.interactables = interactables;
         this.minigameManager = minigameManager;
         this.customerManager = customerManager;
+        this.customerManager.cafe = this;
         this.inventory = components[0];
         this.playerPos = vec2(10, 13);
         this.score = score;
@@ -110,13 +111,13 @@ class Cafe extends Scene {
         this.book.recipes = [
             new Recipe(
                 recipeOne,
-                vec2(mainCanvasSize.x * 0.81, mainCanvasSize.y * 0.17),
+                vec2(width * 0.81, height * 0.28),
             )
         ]
         this.book.recipesTwo = [
             new Recipe(
                 recipeTwo,
-                vec2(mainCanvasSize.x * 0.81, mainCanvasSize.y * 0.17),
+                vec2(width * 0.81, height * 0.28),
             )
         ]
         this.addObject(this.book);

@@ -7,7 +7,7 @@ class Task {
         drawTextScreen(
             this.order,
             this.pos,
-            20,
+            18,
             rgb(0, 0, 0),
             0,
             rgb(0, 0, 0),
@@ -100,10 +100,10 @@ class Book {
     appendTask(order) {
         const offset = 0.035;
         const length = this.tasks.length;
-        const newYPos = mainCanvasSize.y * (0.295 + length * offset)
+        const newYPos = height * (0.29 + length * offset)
         const newTask = new Task(
             order,
-            vec2(mainCanvasSize.x * 0.81, newYPos),
+            vec2(width * 0.81, newYPos),
         )
         this.tasks.push(newTask);
     }
@@ -112,8 +112,8 @@ class Book {
         this.tasks?.splice(index, 1);
         for (let i = index; i < this.tasks.length; i++) {
             this.tasks[i].pos = vec2(
-                mainCanvasSize.x * 0.81,
-                mainCanvasSize.y * (0.295 + i * offset)
+                width * 0.81,
+                height * (0.295 + i * offset)
             );
         }
     }
@@ -152,7 +152,7 @@ class Book {
         // Draw the text of the current information required
         drawTextScreen(
             this.index === 0 ? "Orders" : this.index === 1 ? "Recipes" : "More Recipes",
-            vec2(mainCanvasSize.x * 0.81, mainCanvasSize.y * 0.26),
+            vec2(width * 0.81, height * 0.26),
             20,
             rgb(0, 0, 0),
             0,

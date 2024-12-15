@@ -35,12 +35,30 @@ class TitleScreen extends Scene {
             ),
             new Button(
                 new Label(
-                    "Credits",
-                    vec2(width * 0.5, height * 0.725),
+                    "Tutorial",
+                    vec2(width * 0.5, height * 0.65),
                     75,
                     rgb(0, 0, 0, 1)
                 ),
-                vec2(0, -5), 
+                vec2(0, -3.25), 
+                vec2(16, 3),
+                () => {
+                    currentTrack = playAudioFile("/audio/cafe_music.mp3", 1, true);
+                    sceneManager.switchScene("Tutorial");
+                },
+                rgb(1, 1, 1, 1),
+                rgb(0, 1, 1, 1),
+                false,
+                true
+            ),
+            new Button(
+                new Label(
+                    "Credits",
+                    vec2(width * 0.5, height * 0.8),
+                    75,
+                    rgb(0, 0, 0, 1)
+                ),
+                vec2(0, -6.5), 
                 vec2(16, 3),
                 () => {
                     sceneManager.switchScene("Credits");

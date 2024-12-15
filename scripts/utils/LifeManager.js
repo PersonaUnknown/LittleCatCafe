@@ -7,6 +7,9 @@ class LifeManager {
     reset() {
         this.currHearts = 5;
     }
+    incrementLife() {
+        this.currHearts = Math.min(this.currHearts + 1, 5);
+    }
     onScoreDecrease() {
         this.currHearts--;
         if (this.currHearts <= 0) {

@@ -92,7 +92,7 @@ class Credits extends Scene {
             new Button(
                 new Label(
                     "<-",
-                    vec2(mainCanvasSize.x * 0.025, mainCanvasSize.y * 0.03),
+                    vec2(width * 0.025, height * 0.05),
                     65,
                     rgb(0, 0, 0, 1)
                 ),
@@ -121,7 +121,7 @@ class Credits extends Scene {
         // Header
         drawTextScreen(
             "Credits",
-            vec2(mainCanvasSize.x * 0.05, mainCanvasSize.y * 0.05),
+            vec2(width * 0.05, height * 0.05),
             50,
             rgb(1, 1, 1, 1),
             5,
@@ -130,7 +130,7 @@ class Credits extends Scene {
         )
         drawTextScreen(
             "Made by Rayna Leung and Eric Tabuchi",
-            vec2(mainCanvasSize.x * 0.01, mainCanvasSize.y * 0.125),
+            vec2(width * 0.01, height * 0.125),
             50,
             rgb(1, 1, 1, 1),
             5,
@@ -143,7 +143,7 @@ class Credits extends Scene {
         for (const source of sources) {
             drawTextScreen(
                 `${source.creator}: ${source.assets.join(", ")}`,
-                vec2(mainCanvasSize.x * 0.01, mainCanvasSize.y * (0.15 + offset * index)),
+                vec2(width * 0.01, height * (0.15 + offset * index)),
                 30,
                 rgb(1, 1, 1, 1),
                 5,

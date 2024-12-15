@@ -61,8 +61,6 @@ class CustomerManager {
         for (let i = 0; i < this.waitingCustomers.length; i++) {
             const customer = this.waitingCustomers[i];
             const order = customer.order;
-            console.log(order);
-            console.log(item);
             if (order === item) {
                 // Remove that customer and then have that customer leave
                 sceneManager.player.setItem(null);
@@ -73,6 +71,10 @@ class CustomerManager {
                 this.onScoreIncreaseCallback(score);
                 this.onCustomerLeave(i, true, true);
                 this.numSatisfiedCustomers++;
+                if (this.numSatisfiedCustomers % 5 === 0) {
+                    this.numSatisfiedCustomers = 0;
+                    this.cafe?.lifeManager.incrementLife();
+                }
                 break;
             }
         }
@@ -104,7 +106,8 @@ class CustomerManager {
             this.numOrderingCustomers--;
 
             // Decrease life count
-            cafe.lifeManager.onScoreDecrease();
+            this.numSatisfiedCustomers = 0;
+            this.cafe?.lifeManager.onScoreDecrease();
         } 
         if (state && this.numWaitingCustomers > 0) {
             this.leavingCustomers.push(this.waitingCustomers[index]);
@@ -116,7 +119,7 @@ class CustomerManager {
             const length = this.leavingCustomers.length - 1;
             this.leavingCustomers[length].setIndex(length);
             this.waitingCustomers?.splice(index, 1);
-            cafe.book?.removeTask(index);
+            this.cafe?.book?.removeTask(index);
             for (let i = index; i < this.waitingCustomers.length; i++) {
                 this.waitingCustomers[i].travel([vec2(11.5, 6.75 - i)]);
                 this.waitingCustomers[i].decrementIndex();
@@ -125,7 +128,8 @@ class CustomerManager {
             this.numWaitingCustomers--;
 
             if (!satisfied) {
-                cafe.lifeManager.onScoreDecrease();
+                this.numSatisfiedCustomers = 0;
+                this.cafe?.lifeManager.onScoreDecrease();
             }
         }
     }
@@ -148,7 +152,8 @@ class CustomerManager {
             },
             (index) => {
                 this.onCustomerExit(index);
-            }
+            },
+            this.cafe
         );
         this.numOrderingCustomers++; 
         newCustomer.travel([vec2(8.5, yOffset)]);
@@ -183,5 +188,37 @@ class CustomerManager {
         for (const customer of this.leavingCustomers) {
             customer.renderPost();
         }
+    }
+}
+class TutorialCustomerManager extends CustomerManager {
+    constructor() {
+        super();
+    }
+    spawnCustomer() {
+        const x = this.elapsedTime / 60;
+        const difficultyFactor = 3 + 0.5 * x + Math.sin(2 * x);
+        const newUpdateRate =  10 / (0.3 * difficultyFactor);
+        console.log(newUpdateRate);
+        this.timer.set(newUpdateRate);
+        const length = this.numOrderingCustomers;
+        if (length >= this.maxCustomers) {
+            return;
+        }
+        const yOffset = 6.75 - this.numOrderingCustomers;
+        const newCustomer = new TutorialCustomer(
+            vec2(8.5, 0), 
+            this.numOrderingCustomers, 
+            (index, state) => {
+                this.onCustomerLeave(index, state);
+            },
+            (index) => {
+                this.onCustomerExit(index);
+            },
+            this.cafe
+        );
+        this.numOrderingCustomers++; 
+        newCustomer.travel([vec2(8.5, yOffset)]);
+        this.orderingCustomers.push(newCustomer);
+        coin.play();
     }
 }

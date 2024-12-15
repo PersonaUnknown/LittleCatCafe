@@ -12,7 +12,7 @@ const CustomerMoods = {
     NONE:      { state: "none", index: -1 },
 };
 class Customer {
-    constructor(pos, index, onLeaveCallback, onExitCallback) {
+    constructor(pos, index, onLeaveCallback, onExitCallback, cafe) {
         this.mood = CustomerMoods.NONE;
         this.pos = pos;
         this.travelTime = 0;
@@ -27,7 +27,7 @@ class Customer {
         this.state = false; // True: Waiting in line, False: Ordering
         this.order = this.generateOrder();
         this.timeWaited = 0;
-        
+        this.cafe = cafe;
         // Determine animation
         const rng = Math.random();
         let spriteIndex = 5;
@@ -74,7 +74,7 @@ class Customer {
                     new TileInfo(vec2(432, spriteOffset), TILE_SIZE, 1),
                 ]
             },
-            0.4,
+            0.25,
             "back"
         );
     }
@@ -111,7 +111,7 @@ class Customer {
             case "frustrated":
                 return;
         }
-        this.timer.set(this.patience / 3)
+        this.timer?.set(this.patience / 3)
     }
     generateOrder() {
         this.mood = CustomerMoods.NONE;
@@ -121,14 +121,14 @@ class Customer {
         return ITEM_NAMES[randomIndex];
     }
     takeOrder() {
-        cafe.book.appendTask(this.order);
-        this.timer.set(this.patience / 3);
+        this.cafe?.book?.appendTask(this.order);
+        this.timer?.set(this.patience / 3);
     }
     update() {
         if (this.state && (this.mood === CustomerMoods.WAITING || this.mood === CustomerMoods.ANNOYED || this.mood === CustomerMoods.IMPATIENT)) {
             this.timeWaited += timeDelta;
         }
-        if (this.timer.elapsed()) {
+        if (this.timer?.elapsed()) {
             this.emote();
         }
         if (
@@ -176,5 +176,11 @@ class Customer {
                 Emoticons[index]
             )
         }
+    }
+}
+class TutorialCustomer extends Customer {
+    constructor(pos, index, onLeaveCallback, onExitCallback, cafe) {
+        super(pos, index, onLeaveCallback, onExitCallback, cafe);
+        this.timer = null;
     }
 }

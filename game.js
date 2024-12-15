@@ -20,7 +20,8 @@ function gameInit()
         cafe,
         new CoffeeScene(),
         new Credits(),
-        gameover
+        gameover,
+        new TutorialCafe()
     ]
     sceneManager.scenes = buildScenes;
 }

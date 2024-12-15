@@ -20,7 +20,7 @@ class Score {
     renderPost() {
         drawTextScreen(
             `Score: ${this.score}`,
-            vec2(mainCanvasSize.x * 0.875, mainCanvasSize.y * 0.9),
+            vec2(width * 0.875, height * 0.9),
             40
         )
     }
