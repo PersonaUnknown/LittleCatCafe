@@ -57,14 +57,6 @@ class CoffeeScene extends Scene {
     }
 
     checkRecipe(input) {
-        function setEqual(a, b) {
-            if (a.size !== b.size) return false;
-            for (const i of b) {
-                if (!a.has(i)) return false;
-            }
-            return true;
-        }
-
         if (input.size === 0) {
             return ITEMS.coffee;
         }

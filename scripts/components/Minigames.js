@@ -89,6 +89,68 @@ class TimerMinigame {
     }
 }
 
+class SandwichMinigame {
+    recipes = [
+        {
+            in : new Set([ITEMS.toast, ITEMS.ham, ITEMS.cheese]),
+            out : ITEMS.sandwich_ham_cheese,
+        },
+        {
+            in : new Set([ITEMS.toast, ITEMS.bacon, ITEMS.lettuce, ITEMS.tomato]),
+            out : ITEMS.sandwich_blt,
+        },
+        {
+            in : new Set([ITEMS.toast, ITEMS.bacon, ITEMS.cheese, ITEMS.egg]),
+            out : ITEMS.sandwich_breakfast,
+        },
+        {
+            in : new Set([ITEMS.bread, ITEMS.cheese]),
+            out : ITEMS.sandwich_cheese_raw,
+        },
+        {
+            in : new Set([ITEMS.bread, ITEMS.ham, ITEMS.cheese, ITEMS.jelly]),
+            out : ITEMS.sandwich_christo_raw,
+        },
+        {
+            in : new Set([ITEMS.toast, ITEMS.peanut_butter, ITEMS.jelly]),
+            out : ITEMS.sandwich_pbj,
+        },
+    ]
+    ingredients = new Set();
+
+    interact(item) {
+        if (item === null) {
+            if (this.ingredients.size === 0) return;
+            for (const r of this.recipes) {
+                if (setEqual(this.ingredients, r.in)) {
+                    sceneManager.player.setItem(r.out);
+                    this.ingredients.clear();
+                    return;
+                }
+            }
+            sceneManager.player.setItem(ITEMS.bad_sandwich);
+            this.ingredients.clear();
+        }
+        else {
+            this.ingredients.add(item);
+            sceneManager.player.setItem(null);
+        }
+    }
+
+
+    update() {
+
+    }
+
+    render() {
+
+    }
+
+    renderPost() {
+
+    }
+}
+
 function initMinigames() {
     return {
         toaster : new TimerMinigame(vec2(14.5, 16), 5, { [ITEMS.bread] : ITEMS.toast }),
@@ -99,6 +161,8 @@ function initMinigames() {
             { 
                 [ITEMS.raw_bacon] : ITEMS.bacon,
                 [ITEMS.raw_egg] : ITEMS.egg,
+                [ITEMS.sandwich_cheese_raw] : ITEMS.sandwich_cheese_cooked,
+                [ITEMS.sandwich_christo_raw] : ITEMS.sandwich_christo_cooked,
             },
             true
         ),
@@ -108,6 +172,8 @@ function initMinigames() {
             { 
                 [ITEMS.raw_bacon] : ITEMS.bacon,
                 [ITEMS.raw_egg] : ITEMS.egg,
+                [ITEMS.sandwich_cheese_raw] : ITEMS.sandwich_cheese_cooked,
+                [ITEMS.sandwich_christo_raw] : ITEMS.sandwich_christo_cooked,
             },
             true
         ),
@@ -120,5 +186,6 @@ function initMinigames() {
                 [ITEMS.raw_burrito] : ITEMS.burrito,
             }
         ),
+        sandwich : new SandwichMinigame(),
     }
 }
