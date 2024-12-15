@@ -108,3 +108,23 @@ const ITEMS_MENU = [
     ITEMS.sandwich_christo_cooked,
     ITEMS.sandwich_pbj,
 ]
+
+const RECIPES_ONE = [
+    "Americano: Espresso + Water",
+    "Latte: Espresso + Milk",
+    "Mocha: Espresso + Milk + Chocolate",
+    "Cooked Egg: Put raw egg on stove",
+    "Cooked Bacon: Put raw bacon on\nthe stove",
+    "Burrito: Put raw burrito in the\nmicrowave",
+    "Cup Noodle: Fill uncooked noodles\nin sink and then microwave it",
+    "BLT: Toast + Tomato + Lettuce +\nCooked Bacon",
+    "Cheese Sandwich: Bread + Cheese",
+    "Grilled Cheese: Put a Cheese\nSandwich on the stove",
+    "Ham + Cheese Sandwich: Toast\n+ Ham + Cheese",
+    "Breakfast Sandwich: Toast +\nCooked Egg + Cheese",
+]
+const RECIPES_TWO = [
+    "PB And J Sandwich: Toast +\n Peanut Butter + Jelly",
+    "Monte Christo: Toast + Ham\n + Cheese + Jelly",
+    "Cooked Monte Christo: Put\nMonte Christo on stove"
+]

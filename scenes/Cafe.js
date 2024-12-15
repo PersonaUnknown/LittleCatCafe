@@ -99,7 +99,26 @@ class Cafe extends Scene {
         this.score = score;
         this.lifeManager = lifeManager;
         this.book = new Book();
-        this.book.appendRecipe("Toast", "");
+        let recipeOne = "";
+        let recipeTwo = "";
+        for (const recipe of RECIPES_ONE) {
+            recipeOne += `${recipe}\n`;
+        }
+        for (const recipe of RECIPES_TWO) {
+            recipeTwo += `${recipe}\n`
+        }
+        this.book.recipes = [
+            new Recipe(
+                recipeOne,
+                vec2(mainCanvasSize.x * 0.81, mainCanvasSize.y * 0.17),
+            )
+        ]
+        this.book.recipesTwo = [
+            new Recipe(
+                recipeTwo,
+                vec2(mainCanvasSize.x * 0.81, mainCanvasSize.y * 0.17),
+            )
+        ]
         this.addObject(this.book);
         this.customerManager.onScoreIncreaseCallback = (value) => { this.addScore(value); }
     }
