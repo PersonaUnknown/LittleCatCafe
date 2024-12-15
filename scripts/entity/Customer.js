@@ -115,10 +115,10 @@ class Customer {
     }
     generateOrder() {
         this.mood = CustomerMoods.NONE;
-        const food = Object.keys(ITEMS);
+        const food = Object.keys(ITEMS_MENU);
         const random = Math.floor(Math.random() * food.length);
-        // const random = 0;
-        return food[random];
+        const randomIndex = ITEMS_MENU[random];
+        return ITEM_NAMES[randomIndex];
     }
     takeOrder() {
         cafe.book.appendTask(this.order);

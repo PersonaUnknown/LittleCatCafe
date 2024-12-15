@@ -11,6 +11,7 @@ class LifeManager {
         this.currHearts--;
         if (this.currHearts <= 0) {
             currentTrack.stop();
+            gameover.setScore(cafe.score.getScore());
             setCameraPos(vec2(0));
             sceneManager.switchScene("Game Over");
             cafe = new Cafe(sceneManager);

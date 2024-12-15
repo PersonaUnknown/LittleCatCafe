@@ -50,7 +50,18 @@ class GameOver extends Scene {
                 true
             )        
         ]
-        const initObjects = [...backgrounds, ...components];
+        const scoreLabel = new Label(
+            "Score: 0",
+            vec2(width * 0.5, height * 0.8),
+            65,
+            rgb(0, 0, 0, 1)
+        );
+        const initObjects = [...backgrounds, ...components, scoreLabel];
         super(4, initObjects);
+        this.scoreLabel = scoreLabel;
+    }
+
+    setScore(value) {
+        this.scoreLabel.setText(`Score: ${value}`);
     }
 }

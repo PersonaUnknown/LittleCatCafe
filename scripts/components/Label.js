@@ -5,6 +5,9 @@ class Label {
         this.size = size;
         this.color = color;    
     }
+    setText(text) {
+        this.text = text;
+    }
     update() {
         
     }

@@ -1,5 +1,6 @@
 let sceneManager;
 let cafe;
+let gameover;
 let currentTrack;
 function gameInit()
 {
@@ -13,12 +14,13 @@ function gameInit()
         [],
     )
     cafe = new Cafe(sceneManager);
+    gameover = new GameOver(sceneManager);
     const buildScenes = [
         new TitleScreen(sceneManager),
         cafe,
         new CoffeeScene(),
         new Credits(),
-        new GameOver(sceneManager)
+        gameover
     ]
     sceneManager.scenes = buildScenes;
 }

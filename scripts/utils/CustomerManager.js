@@ -43,10 +43,10 @@ class CustomerManager {
         }
     }
     onCustomerOrderCheck() {
-        const item = sceneManager.player.item;
+        const item = ITEM_NAMES[sceneManager.player.item];
         for (let i = 0; i < this.waitingCustomers.length; i++) {
             const customer = this.waitingCustomers[i];
-            const order = ITEMS[customer.order];
+            const order = customer.order;
             if (order === item) {
                 // Remove that customer and then have that customer leave
                 sceneManager.player.setItem(null);
