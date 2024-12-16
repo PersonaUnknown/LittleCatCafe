@@ -60,7 +60,7 @@ class Cafe extends Scene {
                 vec2(11, 9),
                 vec2(1),
                 () => { this.customerManager.onCustomerOrderCheck(); },
-                "Waiting Area",
+                "Pick up",
                 true
             ),
             new Interactable(
@@ -87,6 +87,9 @@ class Cafe extends Scene {
             new Interactable(vec2(12, 14), vec2(2, 1), (item) => {minigameManager.sink.interact(item)}, "Sink", true),
             new Interactable(vec2(15, 14), vec2(1), (item) => {minigameManager.microwave.interact(item)}, "Microwave", true),
             new Interactable(vec2(7, 12), vec2(1), (item) => {minigameManager.sandwich.interact(item)}, "Sandwich station", true),
+            new Interactable(vec2(7, 10), vec2(1), (item) => {minigameManager.sandwich.interact(item)}, "Sandwich station", true),
+            new Interactable(vec2(2, 10), vec2(1), () => {sceneManager.player.setItem(null)}, "Trash", true),
+            new Interactable(vec2(1, 11), vec2(1), () => {sceneManager.player.setItem(null)}, "Trash", true),
         ]
         const initObjects = [customerManager, ...components, ...interactables, ...containers, ...Object.values(minigameManager)];
         super(1, initObjects);
