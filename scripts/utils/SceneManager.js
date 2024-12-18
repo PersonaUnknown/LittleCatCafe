@@ -14,6 +14,7 @@ class SceneManager {
         this.index = index;
         this.scenes = scenes;
         this.player = null;
+        this.fadeTimer = new Timer();
     }
     update() {
         const index = this.index;
@@ -38,8 +39,13 @@ class SceneManager {
             const currScene = scenes[index];
             currScene.renderPost();
         }
+
+        if (this.fadeTimer.active()) {
+            drawRect(vec2(8, 8), vec2(64), rgb(0, 0, 0, 1 - this.fadeTimer.getPercent()));
+        }
     }
     switchScene(scene) {
+        this.fadeTimer.set(0.25);
         let sceneId = SceneList[scene];
         if (this.index !== sceneId) {
             this.scenes[this.index].destroy();
