@@ -1,7 +1,7 @@
 const TILE_SIZE = vec2(16, 16);
 
 const sprites = [
-    "sprites/Backgrounds/debug_title.png",
+    "sprites/Backgrounds/title.png",
     "sprites/neko_cats.png",
     "sprites/neko-cafe-furnitures.png",
     "sprites/UI/divider.png",
@@ -21,7 +21,7 @@ const sprites = [
 ]
 const TitleBackground = new TileInfo(
     vec2(0, 0),
-    vec2(2304, 1536),
+    vec2(256, 144),
     0
 )
 const Divider = new TileInfo(
