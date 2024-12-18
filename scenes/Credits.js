@@ -75,6 +75,12 @@ const sources = [
             "coin01",
             "correct_answer3",
         ]
+    },
+    {
+        creator: "GitHub Repo",
+        assets: [
+            "https://github.com/PersonaUnknown/LittleCatCafe"
+        ]
     }
 ]
 class Credits extends Scene {
