@@ -47,28 +47,24 @@ class Cafe extends Scene {
                 vec2(1), 
                 () => { containers[0].showMenu(); }, 
                 "Fridge", 
-                true
             ),
             new Interactable(
                 vec2(8, 9),
                 vec2(1),
                 () => { this.customerManager.onCustomerOrder(); },
                 "Register",
-                true
             ),
             new Interactable(
                 vec2(11, 9),
                 vec2(1),
                 () => { this.customerManager.onCustomerOrderCheck(); },
                 "Pick up",
-                true
             ),
             new Interactable(
                 vec2(14, 10),
                 vec2(4, 1),
                 () => { containers[1].showMenu(); },
                 "Pastries",
-                true
             ),
             new Interactable(
                 vec2(6, 14),
@@ -78,18 +74,17 @@ class Cafe extends Scene {
                     if (item === ITEMS.coffee) sceneManager.switchScene("Coffee");
                 },
                 "Coffee station",
-                true
             ),
-            new Interactable(vec2(14, 14), vec2(1), (item) => {minigameManager.toaster.interact(item)}, "Toaster", true),
-            new Interactable(vec2(7, 14), vec2(1), (item) => {minigameManager.coffee_machine.interact(item)}, "Coffee machine", true),
-            new Interactable(vec2(8, 14), vec2(1), (item) => {minigameManager.stove_left.interact(item)}, "Stove", true),
-            new Interactable(vec2(9, 14), vec2(1), (item) => {minigameManager.stove_right.interact(item)}, "Stove", true),
-            new Interactable(vec2(12, 14), vec2(2, 1), (item) => {minigameManager.sink.interact(item)}, "Sink", true),
-            new Interactable(vec2(15, 14), vec2(1), (item) => {minigameManager.microwave.interact(item)}, "Microwave", true),
-            new Interactable(vec2(7, 12), vec2(1), (item) => {minigameManager.sandwich.interact(item)}, "Sandwich station", true),
-            new Interactable(vec2(7, 10), vec2(1), (item) => {minigameManager.sandwich.interact(item)}, "Sandwich station", true),
-            new Interactable(vec2(2, 10), vec2(1), () => {sceneManager.player.setItem(null)}, "Trash", true),
-            new Interactable(vec2(1, 11), vec2(1), () => {sceneManager.player.setItem(null)}, "Trash", true),
+            new Interactable(vec2(14, 14), vec2(1), (item) => {minigameManager.toaster.interact(item)}, "Toaster"),
+            new Interactable(vec2(7, 14), vec2(1), (item) => {minigameManager.coffee_machine.interact(item)}, "Coffee machine"),
+            new Interactable(vec2(8, 14), vec2(1), (item) => {minigameManager.stove_left.interact(item)}, "Stove"),
+            new Interactable(vec2(9, 14), vec2(1), (item) => {minigameManager.stove_right.interact(item)}, "Stove"),
+            new Interactable(vec2(12, 14), vec2(2, 1), (item) => {minigameManager.sink.interact(item)}, "Sink"),
+            new Interactable(vec2(15, 14), vec2(1), (item) => {minigameManager.microwave.interact(item)}, "Microwave"),
+            new Interactable(vec2(7, 12), vec2(1), (item) => {minigameManager.sandwich.interact(item)}, "Sandwich station"),
+            new Interactable(vec2(7, 10), vec2(1), (item) => {minigameManager.sandwich.interact(item)}, "Sandwich station"),
+            new Interactable(vec2(2, 10), vec2(1), () => {sceneManager.player.setItem(null)}, "Trash"),
+            new Interactable(vec2(1, 11), vec2(1), () => {sceneManager.player.setItem(null)}, "Trash"),
         ]
         const initObjects = [customerManager, ...components, ...interactables, ...containers, ...Object.values(minigameManager)];
         super(1, initObjects);

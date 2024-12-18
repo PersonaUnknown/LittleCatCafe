@@ -153,11 +153,11 @@ class SandwichMinigame {
 
 function initMinigames() {
     return {
-        toaster : new TimerMinigame(vec2(14.5, 16), 5, { [ITEMS.bread] : ITEMS.toast }),
+        toaster : new TimerMinigame(vec2(14.5, 16), 3, { [ITEMS.bread] : ITEMS.toast }),
         coffee_machine : new TimerMinigame(vec2(7.5, 16), 5, { [ITEMS.any] : ITEMS.coffee }),
         stove_left : new TimerMinigame(
             vec2(8.5, 16),
-            5,
+            8,
             { 
                 [ITEMS.raw_bacon] : ITEMS.bacon,
                 [ITEMS.raw_egg] : ITEMS.egg,
@@ -168,7 +168,7 @@ function initMinigames() {
         ),
         stove_right : new TimerMinigame(
             vec2(9.5, 16),
-            5,
+            8,
             { 
                 [ITEMS.raw_bacon] : ITEMS.bacon,
                 [ITEMS.raw_egg] : ITEMS.egg,
@@ -180,7 +180,7 @@ function initMinigames() {
         sink : new TimerMinigame(vec2(13, 16), 1, { [ITEMS.ramen_raw] : ITEMS.ramen_water }),
         microwave : new TimerMinigame(
             vec2(15.5, 16),
-            5,
+            3,
             {
                 [ITEMS.ramen_water] : ITEMS.ramen_cooked,
                 [ITEMS.raw_burrito] : ITEMS.burrito,

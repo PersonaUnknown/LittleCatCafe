@@ -136,7 +136,7 @@ class CustomerManager {
     spawnCustomer() {
         const x = this.elapsedTime / 60;
         const difficultyFactor = 3 + 0.5 * x + Math.sin(2 * x);
-        const newUpdateRate =  10 / (0.3 * difficultyFactor);
+        const newUpdateRate =  15 / (0.3 * difficultyFactor);
         console.log(newUpdateRate);
         this.timer.set(newUpdateRate);
         const length = this.numOrderingCustomers;

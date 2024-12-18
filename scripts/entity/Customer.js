@@ -13,19 +13,27 @@ const CustomerMoods = {
 };
 class Customer {
     constructor(pos, index, onLeaveCallback, onExitCallback, cafe) {
+        const sandwiches = [
+            "Ham & cheese sandwich",
+            "BLT sandwich",
+            "Breakfast sandwich",
+            "Grilled cheese",
+            "Cooked Monte Christo",
+            "PB & J",
+        ]
         this.mood = CustomerMoods.NONE;
         this.pos = pos;
         this.travelTime = 0;
         this.currentDestination = this.pos;
         this.moveSpeed = 0.02;
         this.targetDestination = [];
-        this.patience = 15;
+        this.order = this.generateOrder();
+        this.patience = sandwiches.includes(this.order) ? 36 : 21;
         this.timer = new Timer(this.patience / 3);
         this.onLeaveCallback = onLeaveCallback;
         this.onExitCallback = onExitCallback;
         this.index = index;
         this.state = false; // True: Waiting in line, False: Ordering
-        this.order = this.generateOrder();
         this.timeWaited = 0;
         this.cafe = cafe;
         // Determine animation
