@@ -6,5 +6,8 @@ class TutorialCafe extends Cafe {
         this.customerManager = tutorialCustomerManager;
         this.customerManager.cafe = this;
         this.customerManager.onScoreIncreaseCallback = (value) => { this.addScore(value); }
+        
+        // Add tutorial book
+        this.objects.push(new TutorialBook());
     }
 }

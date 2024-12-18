@@ -16,7 +16,8 @@ const sprites = [
     "sprites/food.png",
     "sprites/UI/emoticons.png",
     "sprites/UI/input_outline_rectangle.png",
-    "sprites/UI/heart.png"
+    "sprites/UI/heart.png",
+    "sprites/UI/pc_controls.png"
 ]
 const TitleBackground = new TileInfo(
     vec2(0, 0),
@@ -120,7 +121,33 @@ const HeartIcon = new TileInfo(
     vec2(8, 7),
     15
 )
-
+const Controls = {
+    w: new TileInfo(
+        vec2(17, 33),
+        vec2(13, 14),
+        16
+    ),
+    a: new TileInfo(
+        vec2(17, 49),
+        vec2(13, 14),
+        16
+    ),
+    s: new TileInfo(
+        vec2(33, 49),
+        vec2(13, 14),
+        16
+    ),
+    d: new TileInfo(
+        vec2(49, 49),
+        vec2(13, 14),
+        16
+    ),
+    e: new TileInfo(
+        vec2(33, 33),
+        vec2(13, 14),
+        16
+    )
+}
 const CafeTileMap = new TileInfo(vec2(), TILE_SIZE, 2);
 
 const PlayerAnims = new Animator(

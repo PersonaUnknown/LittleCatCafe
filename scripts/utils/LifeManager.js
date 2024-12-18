@@ -22,9 +22,7 @@ class LifeManager {
         }
     }
     update() {
-        if (keyWasPressed("KeyG")) {
-            this.onScoreDecrease();
-        }
+
     }
     render() {
 
