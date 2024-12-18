@@ -45,6 +45,7 @@ class TitleScreen extends Scene {
                 vec2(16, 3),
                 () => {
                     tutorialCafe = new TutorialCafe();
+                    sceneManager.scenes[5] = tutorialCafe;
                     currentTrack = playAudioFile("/audio/cafe_music.mp3", 1, true);
                     sceneManager.switchScene("Tutorial");
                 },

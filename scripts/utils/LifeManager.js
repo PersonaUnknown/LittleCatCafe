@@ -20,6 +20,7 @@ class LifeManager {
             cafe = new Cafe(sceneManager);
             tutorialCafe = new TutorialCafe();
             sceneManager.scenes[1] = cafe;
+            sceneManager.scenes[5] = tutorialCafe;
         }
     }
     update() {
