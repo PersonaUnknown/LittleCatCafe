@@ -74,6 +74,16 @@ class TutorialBook {
                 []
             ),
             new TutorialPage(
+                "Cooking",
+                [
+                    [
+                        "Interact with various\nwork stations to assemble\nmore complex foods. You'll\nneed an empty hand to\ngrab food from those\nstations. Use the trashcan\nin the corner if you need\nto free up your hands.",
+                        vec2(width * 0.025, height * 0.63)
+                    ],
+                ],
+                []
+            ),
+            new TutorialPage(
                 "Coffee",
                 [
                     [
@@ -188,7 +198,7 @@ class TutorialBook {
         this.pages[this.index].renderPost();
 
         // Nav Button Rendering
-        if (this.index < this.pages.length) {
+        if (this.index < this.pages.length - 1) {
             this.navButtons[1].renderPost();
         }
         if (this.index > 0) {
