@@ -89,7 +89,7 @@ class FoodContainer {
         )
     }
     showMenu() {
-        if (this.foods.length !== 0) {    
+        if (this.foods.length !== 0 && sceneManager.player.item === null) {    
             this.isHidden = false;
             sceneManager.player.onBusyAction();
         }
