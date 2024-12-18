@@ -13,7 +13,8 @@ class TitleScreen extends Scene {
                 "Little Cat Cafe",
                 vec2(width * 0.5, height * 0.25),
                 75,
-                rgb(0, 0, 0, 1)
+                rgb(0, 0, 0, 1),
+                rgb(1, 1, 1, 1)
             ),
             new Button(
                 new Label(
