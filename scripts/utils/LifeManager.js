@@ -18,6 +18,7 @@ class LifeManager {
             setCameraPos(vec2(0));
             sceneManager.switchScene("Game Over");
             cafe = new Cafe(sceneManager);
+            tutorialCafe = new TutorialCafe();
             sceneManager.scenes[1] = cafe;
         }
     }
