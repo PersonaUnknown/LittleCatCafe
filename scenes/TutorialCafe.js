@@ -31,5 +31,15 @@ class TutorialCafe extends Cafe {
             true
         )
         this.objects.push(backButton);
+
+        // Replace coffee station with tutorial variant
+        for (const i of this.objects) {
+            if (i instanceof Interactable && i.tooltip === "Coffee station") {
+                i.action = (item) => {
+                    this.playerPos = sceneManager.player.pos;
+                    if (item === ITEMS.coffee) sceneManager.switchScene("TutorialCoffee");
+                }
+            }
+        }
     }
 }

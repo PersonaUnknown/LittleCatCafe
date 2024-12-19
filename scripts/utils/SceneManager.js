@@ -4,7 +4,8 @@ const SceneList = {
     "Coffee" : 2,
     "Credits": 3,
     "Game Over": 4,
-    "Tutorial": 5
+    "Tutorial": 5,
+    "TutorialCoffee" : 6,
 }
 function getSceneByName(scene) {
     return SceneList[scene];

@@ -1,5 +1,5 @@
 class CoffeeScene extends Scene {
-    constructor() {
+    constructor(tutorial = false) {
         const draggables = [
             new Draggable(vec2(4, 14), vec2(4), FoodSprites[ITEMS.water], ITEMS.water),
             new Draggable(vec2(9, 14), vec2(4), FoodSprites[ITEMS.milk], ITEMS.milk),
@@ -25,7 +25,7 @@ class CoffeeScene extends Scene {
             vec2(14, 2),
             vec2(8, 2),
             () => {
-                sceneManager.switchScene("Cafe");
+                sceneManager.switchScene(tutorial ? "Tutorial" : "Cafe");
                 sceneManager.player.setItem(this.checkRecipe(this.ingredients));
                 this.ingredients.clear();
                 this.ingredientsString = "Added:\n";
