@@ -3,39 +3,421 @@
 'use strict';
 
 /** 
- * LittleJS - Release Mode
- * - This file is used for release builds in place of engineDebug.js
- * - Debug functionality is disabled to reduce size and increase performance
+ * LittleJS Debug System
+ * - Press Esc to show debug overlay with mouse pick
+ * - Number keys toggle debug functions
+ * - +/- apply time scale
+ * - Debug primitive rendering
+ * - Save a 2d canvas as a png image
+ * @namespace Debug
  */
 
 
 
-let showWatermark = 0;
-let debugKey = '';
-const debug = 0;
-const debugOverlay = 0;
-const debugPhysics = 0;
-const debugParticles = 0;
-const debugRaycast = 0;
-const debugGamepads = 0;
-const debugMedals = 0;
+/** True if debug is enabled
+ *  @type {Boolean}
+ *  @default
+ *  @memberof Debug */
+const debug = true;
 
-// debug commands are automatically removed from the final build
-function ASSERT          (){}
-function debugInit       (){}
-function debugUpdate     (){}
-function debugRender     (){}
-function debugRect       (){}
-function debugPoly       (){}
-function debugCircle     (){}
-function debugPoint      (){}
-function debugLine       (){}
-function debugOverlap    (){}
-function debugText       (){}
-function debugClear      (){}
-function debugSaveCanvas (){}
-function debugSaveText   (){}
-function debugSaveDataURL(){}
+/** True if asserts are enaled
+ *  @type {Boolean}
+ *  @default
+ *  @memberof Debug */
+const enableAsserts = true;
+
+/** Size to render debug points by default
+ *  @type {Number}
+ *  @default
+ *  @memberof Debug */
+const debugPointSize = .5;
+
+/** True if watermark with FPS should be shown, false in release builds
+ *  @type {Boolean}
+ *  @default
+ *  @memberof Debug */
+let showWatermark = true;
+
+/** Key code used to toggle debug mode, Esc by default
+ *  @type {String}
+ *  @default
+ *  @memberof Debug */
+let debugKey = 'Escape';
+
+/** True if the debug overlay is active, always false in release builds
+ *  @type {Boolean}
+ *  @default
+ *  @memberof Debug */
+let debugOverlay = false;
+
+// Engine internal variables not exposed to documentation
+let debugPrimitives = [], debugPhysics = false, debugRaycast = false, debugParticles = false, debugGamepads = false, debugMedals = false, debugTakeScreenshot, downloadLink;
+
+///////////////////////////////////////////////////////////////////////////////
+// Debug helper functions
+
+/** Asserts if the expression is false, does not do anything in release builds
+ *  @param {Boolean} assert
+ *  @param {Object} [output]
+ *  @memberof Debug */
+function ASSERT(assert, output) 
+{
+    if (enableAsserts)
+        output ? console.assert(assert, output) : console.assert(assert);
+}
+
+/** Draw a debug rectangle in world space
+ *  @param {Vector2} pos
+ *  @param {Vector2} [size=Vector2()]
+ *  @param {String}  [color]
+ *  @param {Number}  [time]
+ *  @param {Number}  [angle]
+ *  @param {Boolean} [fill]
+ *  @memberof Debug */
+function debugRect(pos, size=vec2(), color='#fff', time=0, angle=0, fill=false)
+{
+    ASSERT(typeof color == 'string', 'pass in css color strings'); 
+    debugPrimitives.push({pos, size:vec2(size), color, time:new Timer(time), angle, fill});
+}
+
+/** Draw a debug circle in world space
+ *  @param {Vector2} pos
+ *  @param {Number}  [radius]
+ *  @param {String}  [color]
+ *  @param {Number}  [time]
+ *  @param {Boolean} [fill]
+ *  @memberof Debug */
+function debugCircle(pos, radius=0, color='#fff', time=0, fill=false)
+{
+    ASSERT(typeof color == 'string', 'pass in css color strings');
+    debugPrimitives.push({pos, size:radius, color, time:new Timer(time), angle:0, fill});
+}
+
+/** Draw a debug point in world space
+ *  @param {Vector2} pos
+ *  @param {String}  [color]
+ *  @param {Number}  [time]
+ *  @param {Number}  [angle]
+ *  @memberof Debug */
+function debugPoint(pos, color, time, angle) {debugRect(pos, undefined, color, time, angle);}
+
+/** Draw a debug line in world space
+ *  @param {Vector2} posA
+ *  @param {Vector2} posB
+ *  @param {String}  [color]
+ *  @param {Number}  [thickness]
+ *  @param {Number}  [time]
+ *  @memberof Debug */
+function debugLine(posA, posB, color, thickness=.1, time)
+{
+    const halfDelta = vec2((posB.x - posA.x)/2, (posB.y - posA.y)/2);
+    const size = vec2(thickness, halfDelta.length()*2);
+    debugRect(posA.add(halfDelta), size, color, time, halfDelta.angle(), true);
+}
+
+/** Draw a debug axis aligned bounding box in world space
+ *  @param {Vector2} pA - position A
+ *  @param {Vector2} sA - size A
+ *  @param {Vector2} pB - position B
+ *  @param {Vector2} sB - size B
+ *  @param {String}  [color]
+ *  @memberof Debug */
+function debugAABB(pA, sA, pB, sB, color)
+{
+    const minPos = vec2(min(pA.x - sA.x/2, pB.x - sB.x/2), min(pA.y - sA.y/2, pB.y - sB.y/2));
+    const maxPos = vec2(max(pA.x + sA.x/2, pB.x + sB.x/2), max(pA.y + sA.y/2, pB.y + sB.y/2));
+    debugRect(minPos.lerp(maxPos,.5), maxPos.subtract(minPos), color);
+}
+
+/** Draw a debug axis aligned bounding box in world space
+ *  @param {String}  text
+ *  @param {Vector2} pos
+ *  @param {Number}  [size]
+ *  @param {String}  [color]
+ *  @param {Number}  [time]
+ *  @param {Number}  [angle]
+ *  @param {String}  [font]
+ *  @memberof Debug */
+function debugText(text, pos, size=1, color='#fff', time=0, angle=0, font='monospace')
+{
+    ASSERT(typeof color == 'string', 'pass in css color strings');
+    debugPrimitives.push({text, pos, size, color, time:new Timer(time), angle, font});
+}
+
+/** Clear all debug primitives in the list
+ *  @memberof Debug */
+function debugClear() { debugPrimitives = []; }
+
+/** Save a canvas to disk 
+ *  @param {HTMLCanvasElement} canvas
+ *  @param {String}            [filename]
+ *  @param {String}            [type]
+ *  @memberof Debug */
+function debugSaveCanvas(canvas, filename='screenshot', type='image/png')
+{ debugSaveDataURL(canvas.toDataURL(type), filename); }
+
+/** Save a text file to disk 
+ *  @param {String}     text
+ *  @param {String}     [filename]
+ *  @param {String}     [type]
+ *  @memberof Debug */
+function debugSaveText(text, filename='text', type='text/plain')
+{ debugSaveDataURL(URL.createObjectURL(new Blob([text], {'type':type})), filename); }
+
+/** Save a data url to disk 
+ *  @param {String}     dataURL
+ *  @param {String}     filename
+ *  @memberof Debug */
+function debugSaveDataURL(dataURL, filename)
+{
+    downloadLink.download = filename;
+    downloadLink.href = dataURL;
+    downloadLink.click();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Engine debug function (called automatically)
+
+function debugInit()
+{
+    // create link for saving screenshots
+    downloadLink = document.createElement('a');
+}
+
+function debugUpdate()
+{
+    if (!debug)
+        return;
+
+    if (keyWasPressed(debugKey)) // Esc
+        debugOverlay = !debugOverlay;
+    if (debugOverlay)
+    {
+        if (keyWasPressed('Digit0'))
+            showWatermark = !showWatermark;
+        if (keyWasPressed('Digit1'))
+            debugPhysics = !debugPhysics, debugParticles = false;
+        if (keyWasPressed('Digit2'))
+            debugParticles = !debugParticles, debugPhysics = false;
+        if (keyWasPressed('Digit3'))
+            debugGamepads = !debugGamepads;
+        if (keyWasPressed('Digit4'))
+            debugRaycast = !debugRaycast;
+        if (keyWasPressed('Digit5'))
+            debugTakeScreenshot = 1;
+    }
+}
+
+function debugRender()
+{
+    glCopyToContext(mainContext);
+
+    if (debugTakeScreenshot)
+    {
+        // composite canvas
+        glCopyToContext(mainContext, true);
+        mainContext.drawImage(overlayCanvas, 0, 0);
+        overlayCanvas.width |= 0;
+
+        // remove alpha and save
+        const w = mainCanvas.width, h = mainCanvas.height;
+        overlayContext.fillRect(0,0,w,h);
+        overlayContext.drawImage(mainCanvas, 0, 0);
+        debugSaveCanvas(overlayCanvas);
+        debugTakeScreenshot = 0;
+    }
+
+    if (debugGamepads && gamepadsEnable && navigator.getGamepads)
+    {
+        // gamepad debug display
+        const gamepads = navigator.getGamepads();
+        for (let i = gamepads.length; i--;)
+        {
+            const gamepad = gamepads[i];
+            if (gamepad)
+            {
+                const stickScale = 1;
+                const buttonScale = .2;
+                const centerPos = cameraPos;
+                const sticks = stickData[i];
+                for (let j = sticks.length; j--;)
+                {
+                    const drawPos = centerPos.add(vec2(j*stickScale*2, i*stickScale*3));
+                    const stickPos = drawPos.add(sticks[j].scale(stickScale));
+                    debugCircle(drawPos, stickScale, '#fff7',0,true);
+                    debugLine(drawPos, stickPos, '#f00');
+                    debugPoint(stickPos, '#f00');
+                }
+                for (let j = gamepad.buttons.length; j--;)
+                {
+                    const drawPos = centerPos.add(vec2(j*buttonScale*2, i*stickScale*3-stickScale-buttonScale));
+                    const pressed = gamepad.buttons[j].pressed;
+                    debugCircle(drawPos, buttonScale, pressed ? '#f00' : '#fff7', 0, true);
+                    debugText(''+j, drawPos, .2);
+                }
+            }
+        }
+    }
+
+    if (debugOverlay)
+    {
+        const saveContext = mainContext;
+        mainContext = overlayContext;
+        
+        // draw red rectangle around screen
+        const cameraSize = getCameraSize();
+        debugRect(cameraPos, cameraSize.subtract(vec2(.1)), '#f008');
+
+        // mouse pick
+        let bestDistance = Infinity, bestObject;
+        for (const o of engineObjects)
+        {
+            if (o.canvas || o.destroyed)
+                continue;
+            if (!o.size.x || !o.size.y)
+                continue;
+
+            const distance = mousePos.distanceSquared(o.pos);
+            if (distance < bestDistance)
+            {
+                bestDistance = distance;
+                bestObject = o;
+            }
+
+            // show object info
+            const size = vec2(max(o.size.x, .2), max(o.size.y, .2));
+            const color1 = new Color(o.collideTiles?1:0, o.collideSolidObjects?1:0, o.isSolid?1:0, o.parent?.2:.5);
+            const color2 = o.parent ? new Color(1,1,1,.5) : new Color(0,0,0,.8);
+            drawRect(o.pos, size, color1, o.angle, false);
+            drawRect(o.pos, size.scale(.8), color2, o.angle, false);
+            o.parent && drawLine(o.pos, o.parent.pos, .1, new Color(0,0,1,.5), false);
+        }
+        
+        if (bestObject)
+        {
+            const raycastHitPos = tileCollisionRaycast(bestObject.pos, mousePos);
+            raycastHitPos && drawRect(raycastHitPos.floor().add(vec2(.5)), vec2(1), new Color(0,1,1,.3));
+            drawRect(mousePos.floor().add(vec2(.5)), vec2(1), new Color(0,0,1,.5), 0, false);
+            drawLine(mousePos, bestObject.pos, .1, raycastHitPos ? new Color(1,0,0,.5) : new Color(0,1,0,.5), false);
+
+            const debugText = 'mouse pos = ' + mousePos + 
+                '\nmouse collision = ' + getTileCollisionData(mousePos) + 
+                '\n\n--- object info ---\n' +
+                bestObject.toString();
+            drawTextScreen(debugText, mousePosScreen, 24, new Color, .05, undefined, 'center', 'monospace');
+        }
+
+        glCopyToContext(mainContext = saveContext);
+    }
+
+    {
+        // draw debug primitives
+        overlayContext.lineWidth = 2;
+        const pointSize = debugPointSize * cameraScale;
+        debugPrimitives.forEach(p=>
+        {
+            overlayContext.save();
+
+            // create canvas transform from world space to screen space
+            const pos = worldToScreen(p.pos);
+            overlayContext.translate(pos.x|0, pos.y|0);
+            overlayContext.rotate(p.angle);
+            overlayContext.fillStyle = overlayContext.strokeStyle = p.color;
+
+            if (p.text != undefined)
+            {
+                overlayContext.font = p.size*cameraScale + 'px '+ p.font;
+                overlayContext.textAlign = 'center';
+                overlayContext.textBaseline = 'middle';
+                overlayContext.fillText(p.text, 0, 0);
+            }
+            else if (p.size == 0 || p.size.x === 0 && p.size.y === 0 )
+            {
+                // point
+                overlayContext.fillRect(-pointSize/2, -1, pointSize, 3);
+                overlayContext.fillRect(-1, -pointSize/2, 3, pointSize);
+            }
+            else if (p.size.x != undefined)
+            {
+                // rect
+                const w = p.size.x*cameraScale|0, h = p.size.y*cameraScale|0;
+                p.fill && overlayContext.fillRect(-w/2|0, -h/2|0, w, h);
+                overlayContext.strokeRect(-w/2|0, -h/2|0, w, h);
+            }
+            else
+            {
+                // circle
+                overlayContext.beginPath();
+                overlayContext.arc(0, 0, p.size*cameraScale, 0, 9);
+                p.fill && overlayContext.fill();
+                overlayContext.stroke();
+            }
+            
+            overlayContext.restore();
+        });
+
+        // remove expired primitives
+        debugPrimitives = debugPrimitives.filter(r=>r.time<0);
+    }
+
+    {
+        // draw debug overlay
+        overlayContext.save();
+        overlayContext.fillStyle = '#fff';
+        overlayContext.textAlign = 'left';
+        overlayContext.textBaseline = 'top';
+        overlayContext.font = '28px monospace';
+        overlayContext.shadowColor = '#000';
+        overlayContext.shadowBlur = 9;
+
+        let x = 9, y = -20, h = 30;
+        if (debugOverlay)
+        {
+            overlayContext.fillText(engineName, x, y += h);
+            overlayContext.fillText('Objects: ' + engineObjects.length, x, y += h);
+            overlayContext.fillText('Time: ' + formatTime(time), x, y += h);
+            overlayContext.fillText('---------', x, y += h);
+            overlayContext.fillStyle = '#f00';
+            overlayContext.fillText('ESC: Debug Overlay', x, y += h);
+            overlayContext.fillStyle = debugPhysics ? '#f00' : '#fff';
+            overlayContext.fillText('1: Debug Physics', x, y += h);
+            overlayContext.fillStyle = debugParticles ? '#f00' : '#fff';
+            overlayContext.fillText('2: Debug Particles', x, y += h);
+            overlayContext.fillStyle = debugGamepads ? '#f00' : '#fff';
+            overlayContext.fillText('3: Debug Gamepads', x, y += h);
+            overlayContext.fillStyle = debugRaycast ? '#f00' : '#fff';
+            overlayContext.fillText('4: Debug Raycasts', x, y += h);
+            overlayContext.fillStyle = '#fff';
+            overlayContext.fillText('5: Save Screenshot', x, y += h);
+
+            let keysPressed = '';
+            for(const i in inputData[0])
+            {
+                if (keyIsDown(i, 0))
+                    keysPressed += i + ' ' ;
+            }
+            keysPressed && overlayContext.fillText('Keys Down: ' + keysPressed, x, y += h);
+
+            let buttonsPressed = '';
+            if (inputData[1])
+            for(const i in inputData[1])
+            {
+                if (keyIsDown(i, 1))
+                    buttonsPressed += i + ' ' ;
+            }
+            buttonsPressed && overlayContext.fillText('Gamepad: ' + buttonsPressed, x, y += h);
+        }
+        else
+        {
+            overlayContext.fillText(debugPhysics ? 'Debug Physics' : '', x, y += h);
+            overlayContext.fillText(debugParticles ? 'Debug Particles' : '', x, y += h);
+            overlayContext.fillText(debugRaycast ? 'Debug Raycasts' : '', x, y += h);
+            overlayContext.fillText(debugGamepads ? 'Debug Gamepads' : '', x, y += h);
+        }
+    
+        overlayContext.restore();
+    }
+}
 /**
  * LittleJS Utility Classes and Functions
  * - General purpose math library
@@ -339,7 +721,7 @@ class RandomGenerator
  */
 function vec2(x=0, y)
 {
-    return typeof x == 'number' ? 
+    return typeof x === 'number' ? 
         new Vector2(x, y == undefined? x : y) : 
         new Vector2(x.x, x.y);
 }
@@ -368,18 +750,12 @@ class Vector2
      *  @param {Number} [y] - Y axis location */
     constructor(x=0, y=0)
     {
-        ASSERT(typeof x == 'number' && typeof y == 'number');
+        ASSERT(typeof x === 'number' && typeof y === 'number');
         /** @property {Number} - X axis location */
         this.x = x;
         /** @property {Number} - Y axis location */
         this.y = y;
     }
-
-    /** Sets values of this vector and returns self
-     *  @param {Number} [x] - X axis location
-     *  @param {Number} [y] - Y axis location
-     *  @return {Vector2} */
-    set(x=0, y=0) { this.x=x; this.y=y; return this; }
 
     /** Returns a new vector that is a copy of this
      *  @return {Vector2} */
@@ -632,15 +1008,6 @@ class Color
         this.a = a;
     }
 
-    /** Sets values of this color and returns self
-     *  @param {Number} [r] - red
-     *  @param {Number} [g] - green
-     *  @param {Number} [b] - blue
-     *  @param {Number} [a] - alpha
-     *  @return {Color} */
-    set(r=1, g=1, b=1, a=1)
-    { this.r=r; this.g=g; this.b=b; this.a=a; return this; }
-
     /** Returns a new color that is a copy of this
      * @return {Color} */
     copy() { return new Color(this.r, this.g, this.b, this.a); }
@@ -803,64 +1170,6 @@ class Color
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// default colors
-
-/** Color - White
- *  @type {Color}
- *  @memberof Utilities */
-const WHITE = rgb();
-
-/** Color - Black
- *  @type {Color}
- *  @memberof Utilities */
-const BLACK = rgb(0,0,0);
-
-/** Color - Gray
- *  @type {Color}
- *  @memberof Utilities */
-const GRAY = rgb(.5,.5,.5);
-
-/** Color - Red
- *  @type {Color}
- *  @memberof Utilities */
-const RED = rgb(1,0,0);
-
-/** Color - Orange
- *  @type {Color}
- *  @memberof Utilities */
-const ORANGE = rgb(1,.5,0);
-
-/** Color - Yellow
- *  @type {Color}
- *  @memberof Utilities */
-const YELLOW = rgb(1,1,0);
-
-/** Color - Green
- *  @type {Color}
- *  @memberof Utilities */
-const GREEN = rgb(0,1,0);
-
-/** Color - Cyan
- *  @type {Color}
- *  @memberof Utilities */
-const CYAN = rgb(0,1,1);
-
-/** Color - Blue
- *  @type {Color}
- *  @memberof Utilities */
-const BLUE = rgb(0,0,1);
-
-/** Color - Purple
- *  @type {Color}
- *  @memberof Utilities */
-const PURPLE = rgb(.5,0,1);
-
-/** Color - Magenta
- *  @type {Color}
- *  @memberof Utilities */
-const MAGENTA = rgb(1,0,1);
-
-///////////////////////////////////////////////////////////////////////////////
 
 /**
  * Timer object tracks how long has passed since it was set
@@ -940,9 +1249,9 @@ let cameraScale = 32;
 
 /** The max size of the canvas, centered if window is larger
  *  @type {Vector2}
- *  @default Vector2(1920,1080)
+ *  @default Vector2(1920,1200)
  *  @memberof Settings */
-let canvasMaxSize = vec2(1920, 1080);
+let canvasMaxSize = vec2(1920, 1200);
 
 /** Fixed size of the canvas, if enabled canvas size never changes
  * - you may also need to set mainCanvasSize if using screen space coords in startup
@@ -1082,13 +1391,6 @@ let gamepadDirectionEmulateStick = true;
  *  @default
  *  @memberof Settings */
 let inputWASDEmulateDirection = true;
-
-/** True if touch input is enabled for mobile devices
- *  - Touch events will be routed to mouse events
- *  @type {Boolean}
- *  @default
- *  @memberof Settings */
-let touchInputEnable = true;
 
 /** True if touch gamepad should appear on mobile devices
  *  - Supports left analog stick, 4 face buttons and start button (button 9)
@@ -1304,11 +1606,6 @@ function setGamepadDirectionEmulateStick(enable) { gamepadDirectionEmulateStick 
  *  @param {Boolean} enable
  *  @memberof Settings */
 function setInputWASDEmulateDirection(enable) { inputWASDEmulateDirection = enable; }
-
-/** Set if touch input is allowed
- *  @param {Boolean} enable
- *  @memberof Settings */
-function setTouchInputEnable(enable) { touchInputEnable = enable; }
 
 /** Set if touch gamepad should appear on mobile devices
  *  @param {Boolean} enable
@@ -1601,7 +1898,7 @@ class EngineObject
                     if (o.mass) // push away if not fixed
                         o.velocity = o.velocity.subtract(velocity);
                         
-                    debugOverlay && debugPhysics && debugOverlap(this.pos, this.size, o.pos, o.size, '#f00');
+                    debugOverlay && debugPhysics && debugAABB(this.pos, this.size, o.pos, o.size, '#f00');
                     continue;
                 }
 
@@ -1663,7 +1960,7 @@ class EngineObject
                     else // bounce if other object is fixed
                         this.velocity.x *= -elasticity;
                 }
-                debugOverlay && debugPhysics && debugOverlap(this.pos, this.size, o.pos, o.size, '#f0f');
+                debugOverlay && debugPhysics && debugAABB(this.pos, this.size, o.pos, o.size, '#f0f');
             }
         }
         if (this.collideTiles)
@@ -1724,22 +2021,6 @@ class EngineObject
         for (const child of this.children)
             child.destroy(child.parent = 0);
     }
-
-    /** Convert from local space to world space
-     *  @param {Vector2} pos - local space point */
-    localToWorld(pos) { return this.pos.add(pos.rotate(-this.angle)); }
-
-    /** Convert from world space to local space
-     *  @param {Vector2} pos - world space point */
-    worldToLocal(pos) { return pos.subtract(this.pos).rotate(this.angle); }
-
-    /** Convert from local space to world space for a vector (rotation only)
-     *  @param {Vector2} vec - local space vector */
-    localToWorldVector(vec) { return vec.rotate(this.angle); }
-
-    /** Convert from world space to local space for a vector (rotation only)
-     *  @param {Vector2} vec - world space vector */
-    worldToLocalVector(vec) { return vec.rotate(-this.angle); }
     
     /** Called to check if a tile collision should be resolved
      *  @param {Number}  tileData - the value of the tile at the position
@@ -1824,21 +2105,6 @@ class EngineObject
             if (this.color)
                 text += '\ncolor = ' + this.color;
             return text;
-        }
-    }
-
-    /** Render debug info for this object  */
-    renderDebugInfo()
-    {
-        if (debug)
-        {
-            // show object info for debugging
-            const size = vec2(max(this.size.x, .2), max(this.size.y, .2));
-            const color1 = rgb(this.collideTiles?1:0, this.collideSolidObjects?1:0, this.isSolid?1:0, this.parent?.2:.5);
-            const color2 = this.parent ? rgb(1,1,1,.5) : rgb(0,0,0,.8);
-            drawRect(this.pos, size, color1, this.angle, false);
-            drawRect(this.pos, size.scale(.8), color2, this.angle, false);
-            this.parent && drawLine(this.pos, this.parent.pos, .1, rgb(0,0,1,.5), false);
         }
     }
 }
@@ -2164,7 +2430,7 @@ function drawCanvas2D(pos, size, angle, mirror, drawFunction, screenSpace, conte
     context.save();
     context.translate(pos.x+.5, pos.y+.5);
     context.rotate(angle);
-    context.scale(mirror ? -size.x : size.x, -size.y);
+    context.scale(mirror ? -size.x : size.x, size.y);
     drawFunction(context);
     context.restore();
 }
@@ -2346,7 +2612,6 @@ function toggleFullscreen()
  * - Tracks keyboard down, pressed, and released
  * - Tracks mouse buttons, position, and wheel
  * - Tracks multiple analog gamepads
- * - Touch input is handled as mouse input
  * - Virtual gamepad for touch devices
  * @namespace Input
  */
@@ -2480,8 +2745,7 @@ function inputUpdate()
     if (headlessMode) return;
 
     // clear input when lost focus (prevent stuck keys)
-    if(!(touchInputEnable && isTouchDevice) && !document.hasFocus())
-        clearInput();
+    isTouchDevice || document.hasFocus() || clearInput();
 
     // update mouse world space position
     mousePos = screenToWorld(mousePosScreen);
@@ -2553,7 +2817,7 @@ function inputInit()
     oncontextmenu = (e)=> false; // prevent right click menu
 
     // init touch input
-    if (isTouchDevice && touchInputEnable && !headlessMode)
+    if (isTouchDevice)
         touchInputInit();
 }
 
@@ -2681,12 +2945,12 @@ function vibrateStop() { vibrate(0); }
 
 /** True if a touch device has been detected
  *  @memberof Input */
-const isTouchDevice = window.ontouchstart !== undefined;
+const isTouchDevice = !headlessMode && window.ontouchstart !== undefined;
 
 // touch gamepad internal variables
 let touchGamepadTimer = new Timer, touchGamepadButtons, touchGamepadStick;
 
-// enable touch input mouse passthrough
+// try to enable touch mouse
 function touchInputInit()
 {
     // add non passive touch event listeners
@@ -2795,7 +3059,6 @@ function touchInputInit()
 // render the touch gamepad, called automatically by the engine
 function touchGamepadRender()
 {
-    if (!touchInputEnable || !isTouchDevice || headlessMode) return;
     if (!touchGamepadEnable || !touchGamepadTimer.isSet())
         return;
     
@@ -2963,17 +3226,7 @@ class Sound
 
         // play the sound
         const playbackRate = pitch + pitch * this.randomness*randomnessScale*rand(-1,1);
-        this.gainNode = audioContext.createGain();
-        return this.source = playSamples(this.sampleChannels, volume, playbackRate, pan, loop, this.sampleRate, this.gainNode);
-    }
-
-    /** Set the sound volume
-     *  @param {Number}  [volume] - How much to scale volume by
-     */
-    setVolume(volume=1)
-    {
-        if (this.gainNode)
-            this.gainNode.gain.value = volume;
+        return this.source = playSamples(this.sampleChannels, volume, playbackRate, pan, loop, this.sampleRate);
     }
 
     /** Stop the last instance of this sound that was played */
@@ -3161,16 +3414,15 @@ function getNoteFrequency(semitoneOffset, rootFrequency=220)
 let audioSuspended = false;
 
 /** Play cached audio samples with given settings
- *  @param {Array}    sampleChannels - Array of arrays of samples to play (for stereo playback)
- *  @param {Number}   [volume] - How much to scale volume by
- *  @param {Number}   [rate] - The playback rate to use
- *  @param {Number}   [pan] - How much to apply stereo panning
- *  @param {Boolean}  [loop] - True if the sound should loop when it reaches the end
- *  @param {Number}   [sampleRate=44100] - Sample rate for the sound
- *  @param {GainNode} [gainNode] - Optional gain node for volume control while playing
+ *  @param {Array}   sampleChannels - Array of arrays of samples to play (for stereo playback)
+ *  @param {Number}  [volume] - How much to scale volume by
+ *  @param {Number}  [rate] - The playback rate to use
+ *  @param {Number}  [pan] - How much to apply stereo panning
+ *  @param {Boolean} [loop] - True if the sound should loop when it reaches the end
+ *  @param {Number}  [sampleRate=44100] - Sample rate for the sound
  *  @return {AudioBufferSourceNode} - The audio node of the sound played
  *  @memberof Audio */
-function playSamples(sampleChannels, volume=1, rate=1, pan=0, loop=false, sampleRate=zzfxR, gainNode) 
+function playSamples(sampleChannels, volume=1, rate=1, pan=0, loop=false, sampleRate=zzfxR) 
 {
     if (!soundEnable || headlessMode) return;
 
@@ -3196,8 +3448,11 @@ function playSamples(sampleChannels, volume=1, rate=1, pan=0, loop=false, sample
     source.playbackRate.value = rate;
     source.loop = loop;
 
+    // set master gain volume
+    setSoundVolume(soundVolume);
+
     // create and connect gain node
-    gainNode = gainNode || audioContext.createGain();
+    const gainNode = audioContext.createGain();
     gainNode.gain.value = volume;
     gainNode.connect(audioGainNode);
 
@@ -4178,9 +4433,9 @@ class Particle extends EngineObject
 
 
 /** List of all medals
- *  @type {Object}
+ *  @type {Array}
  *  @memberof Medals */
-const medals = {};
+const medals = [];
 
 // Engine internal variables not exposed to documentation
 let medalsDisplayQueue = [], medalsSaveName, medalsDisplayTimeLast;
@@ -4196,45 +4451,8 @@ function medalsInit(saveName)
 {
     // check if medals are unlocked
     medalsSaveName = saveName;
-    if (!debugMedals)
-        medalsForEach(medal=> medal.unlocked = (localStorage[medal.storageKey()] | 0));
-
-    // engine automatically renders medals
-    engineAddPlugin(undefined, medalsRender);
-    function medalsRender()
-    {
-        if (!medalsDisplayQueue.length)
-            return;
-        
-        // update first medal in queue
-        const medal = medalsDisplayQueue[0];
-        const time = timeReal - medalsDisplayTimeLast;
-        if (!medalsDisplayTimeLast)
-            medalsDisplayTimeLast = timeReal;
-        else if (time > medalDisplayTime)
-        {
-            medalsDisplayTimeLast = 0;
-            medalsDisplayQueue.shift();
-        }
-        else
-        {
-            // slide on/off medals
-            const slideOffTime = medalDisplayTime - medalDisplaySlideTime;
-            const hidePercent = 
-                time < medalDisplaySlideTime ? 1 - time / medalDisplaySlideTime :
-                time > slideOffTime ? (time - slideOffTime) / medalDisplaySlideTime : 0;
-            medal.render(hidePercent);
-        }
-    }
+    debugMedals || medals.forEach(medal=> medal.unlocked = (localStorage[medal.storageKey()] | 0));
 }
-
-/** Calls a function for each medal
- *  @param {Function} callback
- *  @memberof Medals */
-function medalsForEach(callback)
-{ Object.values(medals).forEach(medal=>callback(medal)); }
-
-///////////////////////////////////////////////////////////////////////////////
 
 /** 
  * Medal - Tracks an unlockable medal 
@@ -4280,6 +4498,7 @@ class Medal
         ASSERT(medalsSaveName, 'save name must be set');
         localStorage[this.storageKey()] = this.unlocked = 1;
         medalsDisplayQueue.push(this);
+        newgrounds && newgrounds.unlockMedal(this.id);
     }
 
     /** Render a medal
@@ -4327,6 +4546,173 @@ class Medal
  
     // Get local storage key used by the medal
     storageKey() { return medalsSaveName + '_' + this.id; }
+}
+
+// engine automatically renders medals
+function medalsRender()
+{
+    if (!medalsDisplayQueue.length)
+        return;
+    
+    // update first medal in queue
+    const medal = medalsDisplayQueue[0];
+    const time = timeReal - medalsDisplayTimeLast;
+    if (!medalsDisplayTimeLast)
+        medalsDisplayTimeLast = timeReal;
+    else if (time > medalDisplayTime)
+    {
+        medalsDisplayTimeLast = 0;
+        medalsDisplayQueue.shift();
+    }
+    else
+    {
+        // slide on/off medals
+        const slideOffTime = medalDisplayTime - medalDisplaySlideTime;
+        const hidePercent = 
+            time < medalDisplaySlideTime ? 1 - time / medalDisplaySlideTime :
+            time > slideOffTime ? (time - slideOffTime) / medalDisplaySlideTime : 0;
+        medal.render(hidePercent);
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+// global Newgrounds object
+let newgrounds;
+
+/** This can used to enable Newgrounds functionality
+ *  @param {Number} app_id   - The newgrounds App ID
+ *  @param {String} [cipher] - The encryption Key (AES-128/Base64)
+ *  @param {Object} [cryptoJS] - An instance of CryptoJS, if there is a cipher
+ *  @memberof Medals */
+function newgroundsInit(app_id, cipher, cryptoJS)
+{ newgrounds = new Newgrounds(app_id, cipher, cryptoJS); }
+
+/** 
+ * Newgrounds API wrapper object
+ * @example
+ * // create a newgrounds object, replace the app id with your own
+ * const app_id = '53123:1ZuSTQ9l';
+ * newgrounds = new Newgrounds(app_id);
+ */
+class Newgrounds
+{
+    /** Create a newgrounds object
+     *  @param {Number} app_id   - The newgrounds App ID
+     *  @param {String} [cipher] - The encryption Key (AES-128/Base64)
+     *  @param {Object} [cryptoJS] - An instance of CryptoJS, if there is a cipher */
+    constructor(app_id, cipher, cryptoJS)
+    {
+        ASSERT(!newgrounds && app_id>0, 'there can only be one newgrounds object');
+        ASSERT(!cipher || cryptoJS, 'must provide cryptojs if there is a cipher');
+
+        this.app_id = app_id;
+        this.cipher = cipher;
+        this.cryptoJS = cryptoJS;
+        this.host = location ? location.hostname : '';
+
+        // get session id from url search params
+        const url = new URL(location.href);
+        this.session_id = url.searchParams.get('ngio_session_id');
+
+        if (!this.session_id)
+            return; // only use newgrounds when logged in
+
+        // get medals
+        const medalsResult = this.call('Medal.getList');
+        this.medals = medalsResult ? medalsResult.result.data['medals'] : [];
+        debugMedals && console.log(this.medals);
+        for (const newgroundsMedal of this.medals)
+        {
+            const medal = medals[newgroundsMedal['id']];
+            if (medal)
+            {
+                // copy newgrounds medal data
+                medal.image =       new Image;
+                medal.image.src =   newgroundsMedal['icon'];
+                medal.name =        newgroundsMedal['name'];
+                medal.description = newgroundsMedal['description'];
+                medal.unlocked =    newgroundsMedal['unlocked'];
+                medal.difficulty =  newgroundsMedal['difficulty'];
+                medal.value =       newgroundsMedal['value'];
+
+                if (medal.value)
+                    medal.description = medal.description + ' (' + medal.value + ')';
+            }
+        }
+    
+        // get scoreboards
+        const scoreboardResult = this.call('ScoreBoard.getBoards');
+        this.scoreboards = scoreboardResult ? scoreboardResult.result.data.scoreboards : [];
+        debugMedals && console.log(this.scoreboards);
+
+        const keepAliveMS = 5 * 60 * 1e3;
+        setInterval(()=>this.call('Gateway.ping', 0, true), keepAliveMS);
+    }
+
+    /** Send message to unlock a medal by id
+     * @param {Number} id - The medal id */
+    unlockMedal(id) { return this.call('Medal.unlock', {'id':id}, true); }
+
+    /** Send message to post score
+     * @param {Number} id    - The scoreboard id
+     * @param {Number} value - The score value */
+    postScore(id, value) { return this.call('ScoreBoard.postScore', {'id':id, 'value':value}, true); }
+
+    /** Get scores from a scoreboard
+     * @param {Number} id       - The scoreboard id
+     * @param {String} [user]   - A user's id or name
+     * @param {Number} [social] - If true, only social scores will be loaded
+     * @param {Number} [skip]   - Number of scores to skip before start
+     * @param {Number} [limit]  - Number of scores to include in the list
+     * @return {Object}         - The response JSON object
+     */
+    getScores(id, user, social=0, skip=0, limit=10)
+    { return this.call('ScoreBoard.getScores', {'id':id, 'user':user, 'social':social, 'skip':skip, 'limit':limit}); }
+
+    /** Send message to log a view */
+    logView() { return this.call('App.logView', {'host':this.host}, true); }
+
+    /** Send a message to call a component of the Newgrounds API
+     * @param {String}  component    - Name of the component
+     * @param {Object}  [parameters] - Parameters to use for call
+     * @param {Boolean} [async]      - If true, don't wait for response before continuing
+     * @return {Object}              - The response JSON object
+     */
+    call(component, parameters, async=false)
+    {
+        const call = {'component':component, 'parameters':parameters};
+        if (this.cipher)
+        {
+            // encrypt using AES-128 Base64 with cryptoJS
+            const cryptoJS = this.cryptoJS;
+            const aesKey = cryptoJS['enc']['Base64']['parse'](this.cipher);
+            const iv = cryptoJS['lib']['WordArray']['random'](16);
+            const encrypted = cryptoJS['AES']['encrypt'](JSON.stringify(call), aesKey, {'iv':iv});
+            call['secure'] = cryptoJS['enc']['Base64']['stringify'](iv.concat(encrypted['ciphertext']));
+            call['parameters'] = 0;
+        }
+
+        // build the input object
+        const input =
+        {
+            'app_id':     this.app_id,
+            'session_id': this.session_id,
+            'call':       call
+        };
+
+        // build post data
+        const formData = new FormData();
+        formData.append('input', JSON.stringify(input));
+        
+        // send post data
+        const xmlHttp = new XMLHttpRequest();
+        const url = 'https://newgrounds.io/gateway_v3.php';
+        xmlHttp.open('POST', url, !debugMedals && async);
+        xmlHttp.send(formData);
+        debugMedals && console.log(xmlHttp.responseText);
+        return xmlHttp.responseText && JSON.parse(xmlHttp.responseText);
+    }
 }
 /**
  * LittleJS WebGL Interface
@@ -4417,7 +4803,7 @@ function glPreRender()
 
     // clear and set to same size as main canvas
     glContext.viewport(0, 0, glCanvas.width=mainCanvas.width, glCanvas.height=mainCanvas.height);
-    glContext.clear(gl_COLOR_BUFFER_BIT);
+    //glContext.clear(gl_COLOR_BUFFER_BIT); // auto cleared when size is set
 
     // set up the shader
     glContext.useProgram(glShader);
@@ -4601,6 +4987,99 @@ function glDraw(x, y, sizeX, sizeY, angle, uv0X, uv0Y, uv1X, uv1Y, rgba, rgbaAdd
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+// post processing - can be enabled to pass other canvases through a final shader
+
+let glPostShader, glPostTexture, glPostIncludeOverlay;
+
+/** Set up a post processing shader
+ *  @param {String} shaderCode
+ *  @param {Boolean} includeOverlay
+ *  @memberof WebGL */
+function glInitPostProcess(shaderCode, includeOverlay=false)
+{
+    ASSERT(!glPostShader, 'can only have 1 post effects shader');
+    if (headlessMode) return;
+    if (!shaderCode) // default shader pass through
+        shaderCode = 'void mainImage(out vec4 c,vec2 p){c=texture(iChannel0,p/iResolution.xy);}';
+
+    // create the shader
+    glPostShader = glCreateProgram(
+        '#version 300 es\n' +            // specify GLSL ES version
+        'precision highp float;'+        // use highp for better accuracy
+        'in vec2 p;'+                    // position
+        'void main(){'+                  // shader entry point
+        'gl_Position=vec4(p+p-1.,1,1);'+ // set position
+        '}'                              // end of shader
+        ,
+        '#version 300 es\n' +            // specify GLSL ES version
+        'precision highp float;'+        // use highp for better accuracy
+        'uniform sampler2D iChannel0;'+  // input texture
+        'uniform vec3 iResolution;'+     // size of output texture
+        'uniform float iTime;'+          // time
+        'out vec4 c;'+                   // out color
+        '\n' + shaderCode + '\n'+        // insert custom shader code
+        'void main(){'+                  // shader entry point
+        'mainImage(c,gl_FragCoord.xy);'+ // call post process function
+        'c.a=1.;'+                       // always use full alpha
+        '}'                              // end of shader
+    );
+
+    // create buffer and texture
+    glPostTexture = glCreateTexture(undefined);
+    glPostIncludeOverlay = includeOverlay;
+
+    // hide the original 2d canvas
+    mainCanvas.style.visibility = 'hidden';
+    if (glPostIncludeOverlay)
+        overlayCanvas.style.visibility = 'hidden';
+}
+
+// Render the post processing shader, called automatically by the engine
+function glRenderPostProcess()
+{
+    if (!glPostShader || headlessMode) return;
+    
+    // prepare to render post process shader
+    if (glEnable)
+    {
+        glFlush(); // clear out the buffer
+        mainContext.drawImage(glCanvas, 0, 0); // copy to the main canvas
+    }
+    else
+    {
+        // set the viewport
+        glContext.viewport(0, 0, glCanvas.width = mainCanvas.width, glCanvas.height = mainCanvas.height);
+    }
+
+    // copy overlay canvas so it will be included in post processing
+    glPostIncludeOverlay && mainContext.drawImage(overlayCanvas, 0, 0);
+
+    // setup shader program to draw one triangle
+    glContext.useProgram(glPostShader);
+    glContext.bindBuffer(gl_ARRAY_BUFFER, glGeometryBuffer);
+    glContext.pixelStorei(gl_UNPACK_FLIP_Y_WEBGL, 1);
+    glContext.disable(gl_BLEND);
+
+    // set textures, pass in the 2d canvas and gl canvas in separate texture channels
+    glContext.activeTexture(gl_TEXTURE0);
+    glContext.bindTexture(gl_TEXTURE_2D, glPostTexture);
+    glContext.texImage2D(gl_TEXTURE_2D, 0, gl_RGBA, gl_RGBA, gl_UNSIGNED_BYTE, mainCanvas);
+
+    // set vertex position attribute
+    const vertexByteStride = 8;
+    const pLocation = glContext.getAttribLocation(glPostShader, 'p');
+    glContext.enableVertexAttribArray(pLocation);
+    glContext.vertexAttribPointer(pLocation, 2, gl_FLOAT, false, vertexByteStride, 0);
+
+    // set uniforms and draw
+    const uniformLocation = (name)=>glContext.getUniformLocation(glPostShader, name);
+    glContext.uniform1i(uniformLocation('iChannel0'), 0);
+    glContext.uniform1f(uniformLocation('iTime'), time);
+    glContext.uniform3f(uniformLocation('iResolution'), mainCanvas.width, mainCanvas.height, 1);
+    glContext.drawArrays(gl_TRIANGLE_STRIP, 0, 4);
+}
+
+///////////////////////////////////////////////////////////////////////////////
 // store gl constants as integers so their name doesn't use space in minifed
 const
 gl_ONE = 1,
@@ -4664,7 +5143,7 @@ const engineName = 'LittleJS';
  *  @type {String}
  *  @default
  *  @memberof Engine */
-const engineVersion = '1.9.9';
+const engineVersion = '1.9.7';
 
 /** Frames per second to update
  *  @type {Number}
@@ -4718,22 +5197,6 @@ function setPaused(isPaused) { paused = isPaused; }
 let frameTimeLastMS = 0, frameTimeBufferMS = 0, averageFPS = 0;
 
 ///////////////////////////////////////////////////////////////////////////////
-// plugin hooks
-
-const pluginUpdateList = [], pluginRenderList = [];
-
-/** Add a new update function for a plugin
- *  @param {Function} [updateFunction]
- *  @param {Function} [renderFunction]
- *  @memberof Engine */
-function engineAddPlugin(updateFunction, renderFunction)
-{
-    updateFunction && pluginUpdateList.push(updateFunction);
-    renderFunction && pluginRenderList.push(renderFunction);
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Main engine functions
 
 /** Startup LittleJS engine with your callback functions
  *  @param {Function} gameInit       - Called once after the engine starts up, setup the game
@@ -4809,7 +5272,6 @@ function engineInit(gameInit, gameUpdate, gameUpdatePost, gameRender, gameRender
                 // update game and objects
                 inputUpdate();
                 gameUpdate();
-                pluginUpdateList.forEach(f=>f());
                 engineObjectsUpdate();
 
                 // do post update
@@ -4831,7 +5293,8 @@ function engineInit(gameInit, gameUpdate, gameUpdatePost, gameRender, gameRender
             for (const o of engineObjects)
                 o.destroyed || o.render();
             gameRenderPost();
-            pluginRenderList.forEach(f=>f());
+            glRenderPostProcess();
+            medalsRender();
             touchGamepadRender();
             debugRender();
             glCopyToContext(mainContext);
@@ -4903,11 +5366,10 @@ function engineInit(gameInit, gameUpdate, gameUpdatePost, gameRender, gameRender
     const styleBody = 
         'margin:0;overflow:hidden;' + // fill the window
         'background:#000;' +          // set background color
-        'user-select:none;' +         // prevent hold to select
-        '-webkit-user-select:none;' + // compatibility for ios
-        (!touchInputEnable ? '' :     // no touch css setttings
         'touch-action:none;' +        // prevent mobile pinch to resize
-        '-webkit-touch-callout:none');// compatibility for ios
+        'user-select:none;' +         // prevent mobile hold to select
+        '-webkit-user-select:none;' + // compatibility for ios
+        '-webkit-touch-callout:none'; // compatibility for ios
     document.body.style.cssText = styleBody;
     document.body.appendChild(mainCanvas = document.createElement('canvas'));
     mainContext = mainCanvas.getContext('2d');
@@ -5122,23 +5584,21 @@ function drawEngineSplashScreen(t)
     x.setLineDash([99*p2,99]);
 
     // cab top
-    rect(7,16,18,-8,color(2,2));
-    rect(7,8,18,4,color(2,3));
-    rect(25,8,8,8,color(2,1));
-    rect(25,8,-18,8);
-    rect(25,8,8,8);
+    rect(7,17,18,-8,color(2,2));
+    rect(7,9,18,4,color(2,3));
+    rect(25,9,8,8,color(2,1));
+    rect(25,9,-18,8);
+    rect(25,9,8,8);
 
     // cab
-    rect(25,16,7,23,color());
-    rect(11,39,14,-23,color(1,1));
-    rect(11,16,14,18,color(1,2));
-    rect(11,16,14,8,color(1,3));
-    rect(25,16,-14,24);
-
-    // cab window
-    rect(15,29,6,-9,color(2,2));
-    circle(15,21,5,0,PI/2,color(2,4),1);
-    rect(21,21,-6,9);
+    rect(25,17,7,22,color());
+    rect(11,40,14,-23,color(1,1));
+    rect(11,17,14,17,color(1,2));
+    rect(11,17,14,9,color(1,3));
+    rect(15,31,6,-9,color(2,2));
+    circle(15,23,5,0,PI/2,color(2,4),1);
+    rect(25,17,-14,23);
+    rect(21,22,-6,9);
 
     // little stack
     rect(37,14,9,6,color(3,2));
@@ -5146,16 +5606,16 @@ function drawEngineSplashScreen(t)
     rect(37,14,9,6);
 
     // big stack
-    rect(50,20,10,-8,color(0,1));
-    rect(50,20,6.5,-8,color(0,2));
-    rect(50,20,3.5,-8,color(0,3));
-    rect(50,20,10,-8);
-    circle(55,2,11.4,.5,PI-.5,color(3,3));
-    circle(55,2,11.4,.5,PI/2,color(3,2),1);
-    circle(55,2,11.4,.5,PI-.5);
-    rect(45,7,20,-7,color(0,2));
-    rect(45,-1,20,4,color(0,3));
-    rect(45,-1,20,8);
+    rect(50,20,10,-8,color(0,1))
+    rect(50,20,6.5,-8,color(0,2))
+    rect(50,20,3.5,-8,color(0,3))
+    rect(50,20,10,-8)
+    circle(55,2,11.4,.5,PI-.5,color(3,3))
+    circle(55,2,11.4,.5,PI/2,color(3,2),1)
+    circle(55,2,11.4,.5,PI-.5)
+    rect(45,7,20,-7,color(0,2))
+    rect(45,-1,20,4,color(0,3))
+    rect(45,-1,20,8)
 
     // engine
     for (let i=5; i--;)
