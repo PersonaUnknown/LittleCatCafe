@@ -82,8 +82,8 @@ const ITEM_NAMES = [
     "Breakfast sandwich",
     "Cheese sandwich",
     "Grilled cheese",
-    "Uncooked Monte Christo",
-    "Cooked Monte Christo",
+    "Raw Monte Christo",
+    "Monte Christo",
     "PB & J",
     "Bad sandwich",
 ]
@@ -125,6 +125,6 @@ const RECIPES_ONE = [
 ]
 const RECIPES_TWO = [
     "PB And J Sandwich: Toast +\n Peanut Butter + Jelly",
-    "Monte Christo: Toast + Ham\n + Cheese + Jelly",
+    "Monte Christo: Bread + Ham\n + Cheese + Jelly",
     "Cooked Monte Christo: Put\nMonte Christo on stove"
 ]

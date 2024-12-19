@@ -7,7 +7,7 @@ class TutorialPage {
     renderPost() {
         drawTextScreen(
             this.header,
-            vec2(width * 0.025, height * 0.59),
+            vec2(width * 0.02, height * 0.59),
             35,
             rgb(1, 1, 1, 1),
             5,
@@ -38,7 +38,7 @@ class TutorialBook {
                 [
                     [
                         "You are running a cafe.\nTake customer orders,\nprepare the food, and\nhand it to them in time.\nAim for a high score! Be\nquick, though. Cats are\nimpatient.",
-                        vec2(width * 0.025, height * 0.63)
+                        vec2(width * 0.02, height * 0.63)
                     ]
                 ],
                 []
@@ -67,8 +67,8 @@ class TutorialBook {
                 "Ingredients",
                 [
                     [
-                        "Basic ingredients and\ndesserts can be obtained\nby interacting with the\nfridge or pastry counter.\nClick on the food icon to\nget it.",
-                        vec2(width * 0.025, height * 0.63)
+                        "Basic ingredients and\ndesserts can be obtained\nby interacting with the\nfridge or pastry counter.\nClick on the food to get\nit. You can only hold onto\none item and need an\nempty hand to grab items.",
+                        vec2(width * 0.02, height * 0.63)
                     ],
                 ],
                 []
@@ -78,7 +78,7 @@ class TutorialBook {
                 [
                     [
                         "Interact with various\nwork stations to assemble\nmore complex foods. You'll\nneed an empty hand to\ngrab food from those\nstations. Use the trash can\nin the corner if you need\nto free up your hands.",
-                        vec2(width * 0.025, height * 0.63)
+                        vec2(width * 0.02, height * 0.63)
                     ],
                 ],
                 []
@@ -88,7 +88,7 @@ class TutorialBook {
                 [
                     [
                         "Interact with the\nCoffee Maker to have it\nproduce one cup of coffee.\nInteract with the Coffee\nMaker to pick it up.\nInteract with the station\nnearby to make different\nkinds of coffee.",
-                        vec2(width * 0.025, height * 0.63)
+                        vec2(width * 0.02, height * 0.63)
                     ]
                 ]
             ),
@@ -97,7 +97,7 @@ class TutorialBook {
                 [
                     [
                         "Grab a ramen cup from the\nfridge and interact with\nthe kitchen sink to fill it\nwith water. Place it then\ninto the microwave.",
-                        vec2(width * 0.025, height * 0.63)
+                        vec2(width * 0.02, height * 0.63)
                     ]
                 ]
             ),
@@ -107,7 +107,7 @@ class TutorialBook {
                 [
                     [
                         "Most sandwiches require\ntoasted bread where\nyou'll need to put bread\n in the toaster. Place\nsandwich ingredients by\nthe cutting board to\nassemble. Interacting with\nan empty hand grabs the\nsandwich.",
-                        vec2(width * 0.025, height * 0.63)
+                        vec2(width * 0.02, height * 0.63)
                     ]
                 ]
             ),
@@ -115,8 +115,8 @@ class TutorialBook {
                 "Customers",
                 [
                     [
-                        "Interact with customers\nby the register to get their\norder. Interact with them\nat the waiting area to\nhand them their food.\nCustomers will leave if\nyou take too long.",
-                        vec2(width * 0.025, height * 0.63)
+                        "Interact with customers\nby the register to get their\norder. Interact again to\nhand them their food.\nCustomers will leave if\nyou take too long. You can\ngive any customer their\norder at any time.",
+                        vec2(width * 0.02, height * 0.63)
                     ]
                 ]
             ),
@@ -125,7 +125,7 @@ class TutorialBook {
                 [
                     [
                         "Keep track of customer\norders and recipes via the \nbook on the right.\nAll recipes can be found on\npages 2 and 3 of this book.",
-                        vec2(width * 0.025, height * 0.63)
+                        vec2(width * 0.02, height * 0.63)
                     ],
                 ],
                 []
@@ -135,7 +135,7 @@ class TutorialBook {
                 [
                     [
                         "1. Prepping some stations\ncan save time\n2. The trash can is far\naway so try not to use it\n3. Be familiar with all the\nrecipes before playing the\nmain game\n4. The game gets harder\nas time progresses",
-                        vec2(width * 0.025, height * 0.63)
+                        vec2(width * 0.02, height * 0.63)
                     ],
                 ],
                 []
