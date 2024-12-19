@@ -77,7 +77,7 @@ class TutorialBook {
                 "Cooking",
                 [
                     [
-                        "Interact with various\nwork stations to assemble\nmore complex foods. You'll\nneed an empty hand to\ngrab food from those\nstations. Use the trashcan\nin the corner if you need\nto free up your hands.",
+                        "Interact with various\nwork stations to assemble\nmore complex foods. You'll\nneed an empty hand to\ngrab food from those\nstations. Use the trash can\nin the corner if you need\nto free up your hands.",
                         vec2(width * 0.025, height * 0.63)
                     ],
                 ],
@@ -115,7 +115,7 @@ class TutorialBook {
                 "Customers",
                 [
                     [
-                        "Interact with customers\nby the register to get their\norder. Interact with them\nat the waiting area to\nhand them their food.",
+                        "Interact with customers\nby the register to get their\norder. Interact with them\nat the waiting area to\nhand them their food.\nCustomers will leave if\nyou take too long.",
                         vec2(width * 0.025, height * 0.63)
                     ]
                 ]
@@ -124,7 +124,17 @@ class TutorialBook {
                 "Orders/Recipes",
                 [
                     [
-                        "Keep track of customer\norders and recipes via the \nbook on the right.",
+                        "Keep track of customer\norders and recipes via the \nbook on the right.\nAll recipes can be found on\npages 2 and 3 of this book.",
+                        vec2(width * 0.025, height * 0.63)
+                    ],
+                ],
+                []
+            ),
+            new TutorialPage(
+                "Tips",
+                [
+                    [
+                        "1. Prepping some stations\ncan save time\n2. The trash can is far\naway so try not to use it\n3. Be familiar with all the\nrecipes before playing the\nmain game\n4. The game gets harder\nas time progresses",
                         vec2(width * 0.025, height * 0.63)
                     ],
                 ],
