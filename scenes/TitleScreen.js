@@ -26,6 +26,8 @@ class TitleScreen extends Scene {
                 vec2(0, 0), 
                 vec2(16, 3),
                 () => {
+                    coin = new SoundWave('audio/coin01.mp3');
+                    correct = new SoundWave('audio/correct_answer3.mp3');
                     currentTrack = playAudioFile("audio/cafe_music.mp3", 1, true);
                     sceneManager.switchScene("Cafe");
                 },
@@ -46,6 +48,8 @@ class TitleScreen extends Scene {
                 () => {
                     tutorialCafe = new TutorialCafe();
                     sceneManager.scenes[5] = tutorialCafe;
+                    coin = new SoundWave('audio/coin01.mp3');
+                    correct = new SoundWave('audio/correct_answer3.mp3');
                     currentTrack = playAudioFile("audio/cafe_music.mp3", 1, true);
                     sceneManager.switchScene("Tutorial");
                 },

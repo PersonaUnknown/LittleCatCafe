@@ -3,10 +3,12 @@ let cafe;
 let tutorialCafe;
 let gameover;
 let currentTrack;
+showSplashScreen = true;
 function gameInit()
 {
     // called once after the engine starts up
     // setup the game
+    fontDefault = 'kitty'
     setCanvasFixedSize(vec2(width, height));
     registerPostStartupSprites();
     const startingIndex = 0;
