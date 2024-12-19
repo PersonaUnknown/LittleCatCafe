@@ -124,7 +124,7 @@ class TutorialBook {
                 "Orders/Recipes",
                 [
                     [
-                        "Keep track of customer\norders and recipes via the \nbook on the right.\nAll recipes can be found on\npages 2 and 3 of this book.",
+                        "Keep track of customer\norders and recipes via the \nbook on the right.\nAll recipes can be found on\npages 2 and 3 of that book.",
                         vec2(width * 0.02, height * 0.63)
                     ],
                 ],
