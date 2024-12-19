@@ -41,7 +41,7 @@ class GameOver extends Scene {
                 vec2(0, -1),
                 vec2(10, 3),
                 () => {
-                    currentTrack = playAudioFile("/audio/cafe_music.mp3", 1, true);
+                    currentTrack = playAudioFile("audio/cafe_music.mp3", 1, true);
                     sceneManager.switchScene("Cafe");
                 },
                 rgb(1, 1, 1, 1),

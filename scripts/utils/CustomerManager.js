@@ -137,7 +137,7 @@ class CustomerManager {
         const x = this.elapsedTime / 60;
         const difficultyFactor = 3 + 0.5 * x + Math.sin(2 * x);
         const newUpdateRate =  15 / (0.3 * difficultyFactor);
-        console.log(newUpdateRate);
+        // console.log(newUpdateRate);
         this.timer.set(newUpdateRate);
         const length = this.numOrderingCustomers;
         if (length >= this.maxCustomers) {
@@ -198,7 +198,7 @@ class TutorialCustomerManager extends CustomerManager {
         const x = this.elapsedTime / 60;
         const difficultyFactor = 3 + 0.5 * x + Math.sin(2 * x);
         const newUpdateRate =  10 / (0.3 * difficultyFactor);
-        console.log(newUpdateRate);
+        // console.log(newUpdateRate);
         this.timer.set(newUpdateRate);
         const length = this.numOrderingCustomers;
         if (length >= this.maxCustomers) {
