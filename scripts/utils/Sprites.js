@@ -7,9 +7,6 @@ const sprites = [
     "sprites/UI/divider.png",
     "sprites/UI/input_square.png",
     "sprites/UI/book.png",
-    "sprites/UI/recipe.png",
-    "sprites/UI/order.png",
-    "sprites/UI/bookmark.png",
     "sprites/UI/notebook.png",
     "sprites/UI/menu.png",
     "sprites/UI/icon_play_outline.png",
@@ -39,113 +36,98 @@ const BookSprite = new TileInfo(
     vec2(892, 1039),
     5
 )
-const RecipeIcon = new TileInfo(
-    vec2(0, 0),
-    vec2(100, 100),
-    6
-)
-const OrderIcon = new TileInfo(
-    vec2(0, 0),
-    vec2(100, 100),
-    7
-)
-const BookmarkIcon = new TileInfo(
-    vec2(0, 0),
-    vec2(100, 100),
-    8
-)
 const NotebookFirstPage = new TileInfo(
     vec2(0, 0),
     vec2(100 , 100),
-    9
+    6
 )
 const NotebookSecondPage = new TileInfo(
     vec2(100, 0),
     vec2(100, 100),
-    9
+    6
 )
 const CafeMenu = new TileInfo(
     vec2(0, 0),
     vec2(125, 110),
-    10
+    7
 )
 const RightArrow = new TileInfo(
     vec2(0, 0),
     vec2(34, 38),
-    11
+    8
 )
 const LeftArrow = new TileInfo(
     vec2(34, 0),
     vec2(34, 38),
-    11
+    8
 )
 const Emoticons = [
     new TileInfo(
         vec2(48, 16),
         vec2(16, 16),
-        13
+        10
     ),
     new TileInfo(
         vec2(64, 16),
         vec2(16, 16),
-        13
+        10
     ),
     new TileInfo(
         vec2(80, 16),
         vec2(16, 16),
-        13
+        10
     ),
     new TileInfo(
         vec2(48, 0),
         vec2(16, 16),
-        13
+        10
     ),
     new TileInfo(
         vec2(32, 32),
         vec2(16, 16),
-        13
+        10
     ),
     new TileInfo(
         vec2(80, 0),
         vec2(16, 16),
-        13
+        10
     )
 ]
 const OutlineRectangle = new TileInfo(
     vec2(0, 0),
     vec2(192, 64),
-    14
+    11
 )
 const HeartIcon = new TileInfo(
     vec2(0, 0),
     vec2(8, 7),
-    15
+    12
 )
 const Controls = {
     w: new TileInfo(
         vec2(17, 33),
         vec2(13, 14),
-        16
+        13
     ),
     a: new TileInfo(
         vec2(17, 49),
         vec2(13, 14),
-        16
+        13
     ),
     s: new TileInfo(
         vec2(33, 49),
         vec2(13, 14),
-        16
+        13
     ),
     d: new TileInfo(
         vec2(49, 49),
         vec2(13, 14),
-        16
+        13
     ),
     e: new TileInfo(
         vec2(33, 33),
         vec2(13, 14),
-        16
+        13
     )
 }
 const CafeTileMap = new TileInfo(vec2(), TILE_SIZE, 2);
@@ -191,6 +173,6 @@ const FoodSprites = {};
 
 function registerPostStartupSprites() {
     for (const i of Object.values(ITEMS)) {
-        FoodSprites[i] = tile(i, 32, 12);
+        FoodSprites[i] = tile(i, 32, 9);
     }
 }

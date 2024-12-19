@@ -1,11 +1,5 @@
 // Credits Screen
 const sources = [
-    { 
-        creator: "ekin tumer",
-        assets: [
-            "Noun Project - Recipe"
-        ]
-    },
     {
         creator: "hello erika",
         assets: [
@@ -31,12 +25,6 @@ const sources = [
         creator: "https://perchance.org/ai-pixel-art-generator",
         assets: [
             "Used to create reference backgrounds"
-        ]
-    },
-    { 
-        creator: "Yaroslav Samoilov",
-        assets: [
-            "Noun Project - Order"
         ]
     },
     {
